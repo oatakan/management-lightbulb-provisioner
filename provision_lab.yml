@@ -30,7 +30,7 @@
       tags:
         - addhost
 
-- include: set_tower_facts.yml pod_name='{{ include_item }}'
+- import_playbook: set_tower_facts.yml pod_name='{{ include_item }}'
   with_items:
     - student1
   loop_control:
