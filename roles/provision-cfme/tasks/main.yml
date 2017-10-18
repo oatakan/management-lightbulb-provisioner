@@ -1,0 +1,61 @@
+---
+- name: copy chrony configuration for RHEL7
+  template:
+    src: chrony.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: chrony_conf
+
+- name: ensure chrony service is started and enabled
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+
+- name: ensure chrony is getting restarted if necessary
+  service:
+    name: chronyd
+    state: restarted
+  when: chrony_conf|changed
+
+- name: perform appliance basic configuration
+  shell: source /root/.bashrc && appliance_console_cli --host={{ inventory_hostname }} --region=99 --internal --password={{ cfme_pass }} --key --force-key --dbdisk=/dev/xvdb --sshpassword={{ root_password }} creates=/var/www/miq/vmdb/log/appliance_console.log
+
+- name: wait for cfme ui
+  wait_for: host={{ inventory_hostname }} port=443 timeout=600
+
+- name: set internal admin password
+  shell: source /root/.bashrc && rails r "User.find_by_userid('admin').update_attributes(:password => '{{ cfme_pass }}')"
+  args:
+    chdir: /var/www/miq/vmdb
+
+- name: copy settings.sql (thank you wolfram richter)
+  copy: 
+    src: settings.sql
+    dest: /tmp/settings.sql 
+    owner: root
+    group: root
+    mode: 0644
+
+- name: apply settings.sql
+  shell: sudo -i -u postgres psql -f /tmp/settings.sql vmdb_production
+
+- name: restart evmserverd
+  service: 
+    name: evmserverd
+    state: restarted
+
+- name: make sure evmserverd is running
+  service: 
+    name: evmserverd 
+    state: started
+    enabled: yes
+
+- name: wait for cfme ui
+  wait_for: host={{ inventory_hostname }} port=443 timeout=600
+
+- name: pause because race
+  pause:
+    minutes: 2

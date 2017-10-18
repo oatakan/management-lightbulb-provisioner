@@ -1,0 +1,9 @@
+{
+  "type":"ManageIQ::Providers::AnsibleTower::Provider",
+  "name":"Ansible Tower",
+  "url":"https://{{ tower_dns_name }}",
+  "credentials" : {
+    "userid"    : "admin",
+    "password"  : "{{ tower_pass }}"
+  }
+}

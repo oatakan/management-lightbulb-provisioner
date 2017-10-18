@@ -1,0 +1,18 @@
+---
+- name: Add Amazon EC2 Provider to ManageIQ
+  manageiq_provider:
+    name: 'AWS01'
+    provider_type: 'amazon'
+    state: 'present'
+    provider_region: 'us-east-1'
+    access_key_id: "{{ ec2_access }}"
+    secret_access_key: "{{ ec2_secret }}"
+    miq_url: 'https://{{ inventory_hostname }}'
+    miq_username: 'admin'
+    miq_password: "{{ cfme_pass }}"
+    miq_verify_ssl: false
+  become: false
+  delegate_to: localhost
+  register: result
+
+- debug: var=result

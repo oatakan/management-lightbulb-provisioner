@@ -1,0 +1,77 @@
+---
+- name: get tar for ansibletower
+  get_url:
+    url: http://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-{{ tower_version }}.el7.tar.gz
+    dest: /tmp/ansible-tower-setup-bundle.tar.gz
+
+- name: untar /tmp/ansible-tower-setup-bundle.tar.gz
+  unarchive:
+    src: /tmp/ansible-tower-setup-bundle.tar.gz
+    dest: /tmp/
+    remote_src: true
+    owner: root
+
+- name: replace /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/roles/nginx/tasks/tasks.yml
+  replace:
+    dest: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/roles/nginx/tasks/tasks.yml
+    regexp: 'www.ansible.com'
+    replace: "{{ ansible_nodename }}"
+
+- name: add /etc/tower path to setting.py
+  lineinfile:
+    dest: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/roles/awx_install/templates/settings.py.j2
+    line: "AWX_PROOT_SHOW_PATHS = ['/etc/tower/']"
+
+- name: copy inventory to setup folder
+  template:
+    src: templates/towerinventorysetup
+    dest: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/inventory
+
+- name: execute the tower installation
+  command: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/setup.sh
+  register: towerinstall
+
+- name: change perms on tower.cert
+  file:
+    path: /etc/tower/tower.cert
+    mode: 0444
+    group: root
+    owner: root
+
+- name: add license
+  uri:
+    url: https://{{inventory_hostname}}/api/v1/config/
+    method: POST
+    validate_certs: no
+    user: admin
+    password: "{{ tower_pass }}"
+    status_code: 200
+    body: "{{ tower_lic }}"
+    body_format: json
+
+- name: install pip needed for manageiq-client
+  yum:
+    name: python2-pip
+    state: latest
+
+- name: install manageiq-client
+  pip:
+    name: manageiq-client
+
+- name: install ansible-tower-cli
+  pip:
+    name: ansible-tower-cli
+
+- name: copy tower-cli config /etc/tower/tower_cli.cfg
+  template:
+    src: templates/tower_cli.cfg.j2
+    dest: /etc/tower/tower_cli.cfg
+    mode: 0600
+
+- name: fixing satellite6 kind /usr/lib/python2.7/site-packages/tower_cli/resources/credential.py
+  template:
+    src: templates/credential.py
+    dest: /usr/lib/python2.7/site-packages/tower_cli/resources/credential.py
+    mode: 0644
+    owner: root
+    group: root

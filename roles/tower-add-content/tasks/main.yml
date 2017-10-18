@@ -1,0 +1,50 @@
+---
+- name: create private key
+  lineinfile:
+    dest: /tmp/private_key.pem
+    line: "{{ ec2_private_key }}"
+    create: yes
+
+- name: add aws creds
+  command: tower-cli credential create --kind aws --name=ldo-ec2 --organization=Default --username {{ ec2_access }} --password {{ ec2_secret }}
+
+- name: add ec2 creds
+  command: tower-cli credential create --kind ssh --username ec2-user --user admin --organization Default --name ec2-user --ssh-key-data /tmp/private_key.pem
+
+- name: remove file
+  file:
+    state: absent
+    path: /tmp/private_key.pem
+
+- name: create inventory
+  command: tower-cli inventory create -n aws --organization=Default 
+  register: inventory
+  retries: 10
+  until: inventory.rc == 0
+  ignore_errors: yes
+  delay: 5
+
+- name: create group
+  command: tower-cli group create -n aws --credential ldo-ec2 -i aws --source ec2
+  register: group
+  retries: 10
+  until: group.rc == 0
+  ignore_errors: yes
+  delay: 5
+
+- name: create project ansible-nginx-example
+  command: tower-cli project create -n ansible-nginx-example --scm-type git --scm-url {{ git_url }}
+  register: project
+  retries: 10
+  until: project.rc == 0
+  ignore_errors: yes
+  delay: 5
+
+- name: create job template nginx_test_job_template
+  command: tower-cli job_template create --name provision-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential ldo-ec2 --playbook nginx_full_ec2.yaml --verbosity more_verbose --extra-vars "ec2_tag_Name=ec2_image=ami-d3c269c5 ec2_instance_type=m3.large ec2_volume_size=41"
+  register: nginx_test_job_template
+  retries: 10
+  until: nginx_test_job_template.rc == 0
+  ignore_errors: yes
+  delay: 5
+

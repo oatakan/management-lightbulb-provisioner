@@ -1,0 +1,63 @@
+- hosts: localhost
+  become: no
+  vars_files:
+    - nodes-ec2.yml
+  roles:
+    - ansible-role-ec2
+
+- hosts: localhost
+  become: no
+  tasks:
+    - name: Add hosts to groups
+      add_host:
+        name: "{{ item.tagged_instances[0].public_ip }}"
+        ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+        groups: tag_role_cfme,tag_app_management_lightbulb
+      with_items: "{{ instances.results }}"
+      when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('cfme' in item.invocation.module_args.instance_tags.role)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: Add hosts to groups
+      add_host:
+        name: "{{ item.tagged_instances[0].public_ip }}"
+        ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+        groups: tag_role_tower,tag_app_management_lightbulb
+      with_items: "{{ instances.results }}"
+      when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('tower' in item.invocation.module_args.instance_tags.role)
+      changed_when: no
+      tags:
+        - addhost
+
+- include: set_tower_facts.yml pod_name='{{ include_item }}'
+  with_items:
+    - student1
+  loop_control:
+    loop_var: include_item
+
+- name: provision cfme
+  hosts: tag_role_cfme:&tag_app_management_lightbulb
+  become: yes
+  remote_user: ec2-user
+  become_method: sudo
+  gather_facts: true
+  vars_files:
+    - "group_vars/all/vars"
+    - "group_vars/all/vault"
+  roles:
+    - provision-cfme
+    - cfme-add-provider-ec2
+    - cfme-add-provider-tower
+
+- name: provision tower
+  hosts: tag_role_tower:&tag_app_management_lightbulb
+  become: yes
+  remote_user: ec2-user
+  become_method: sudo
+  gather_facts: true
+  vars_files:
+    - "group_vars/all/vars"
+    - "group_vars/all/vault"
+  roles:
+    - provision-ansible-tower

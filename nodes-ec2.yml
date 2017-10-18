@@ -1,0 +1,28 @@
+---
+nodes:
+  - name: cfme
+    role: cfme
+    app_name: management_lightbulb
+    pod_name: student1
+    instance_type: m1.large
+    image: ami-c74b98bd #cfme
+    volumes:
+      - device_name: /dev/sda1
+        volume_type: gp2
+        volume_size: 20
+        delete_on_termination: true
+      - device_name: /dev/sdb1
+        volume_type: gp2
+        volume_size: 20
+        delete_on_termination: true
+  - name: tower
+    role: tower
+    app_name: management_lightbulb
+    pod_name: student1
+    instance_type: t2.medium
+    image: ami-85241def #rhel7-tower
+    volumes:
+      - device_name: /dev/sda1
+        volume_type: gp2
+        volume_size: 10
+        delete_on_termination: true
