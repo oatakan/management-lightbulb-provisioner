@@ -30,11 +30,9 @@
       tags:
         - addhost
 
-- import_playbook: set_tower_facts.yml pod_name='{{ include_item }}'
+- import_playbook: set_tower_facts.yml pod_name='{{ item }}'
   with_items:
     - student1
-  loop_control:
-    loop_var: include_item
 
 - name: provision cfme
   hosts: tag_role_cfme:&tag_app_management_lightbulb
