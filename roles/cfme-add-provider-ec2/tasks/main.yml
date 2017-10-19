@@ -14,5 +14,9 @@
   become: false
   delegate_to: localhost
   register: result
+  retries: 10
+  until: result|success
+  ignore_errors: yes
+  delay: 5
 
 - debug: var=result
