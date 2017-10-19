@@ -9,9 +9,6 @@
           "tag:app": management_lightbulb
       register: ec2_instances
 
-    - debug:
-        var: ec2_instances
-
     - name: terminate instances
       ec2:
         region: "{{ ec2_region }}"

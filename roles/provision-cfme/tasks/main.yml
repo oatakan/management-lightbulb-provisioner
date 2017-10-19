@@ -31,7 +31,7 @@
   args:
     chdir: /var/www/miq/vmdb
 
-- name: copy settings.sql (thank you wolfram richter)
+- name: copy settings.sql
   copy: 
     src: settings.sql
     dest: /tmp/settings.sql 
@@ -42,6 +42,7 @@
 - name: apply settings.sql
   shell: sudo -i -u postgres psql -f /tmp/settings.sql vmdb_production
 
+# use handlers
 - name: restart evmserverd
   service: 
     name: evmserverd
