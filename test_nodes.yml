@@ -1,0 +1,26 @@
+- name: Generate users list
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  vars_files:
+    - template-nodes-per-pod-ec2.yml
+  tasks:
+    - name: generate users list
+      set_fact:
+        users: "{{ users|default([]) + [ {'name': 'student' + item, 'username': 'student' + item, 'email': 'student' + item + '@example.com'} ] }}"
+      with_sequence: start="{{ student_count_start }}" end="{{ student_count_end }}"
+      when: student_count_start is defined and student_count_end is defined
+
+    - name: initialize nodes variable
+      set_fact:
+        nodes: []
+
+    - name: generate nodes list
+      set_fact:
+        nodes: "{{ nodes }} + {{ template_nodes }}"
+      with_nested:
+        - "{{ users }}"
+
+    - debug:
+        var: nodes

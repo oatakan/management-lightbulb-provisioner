@@ -1,0 +1,47 @@
+---
+- name: add cfme hosts to groups
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_cfme,tag_app_management_lightbulb
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('cfme' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - addhost
+
+- name: add tower hosts to groups
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_tower,tag_app_management_lightbulb
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('tower' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - addhost
+
+- name: add hosts to pod groups
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: "tag_pod_{{ item.invocation.module_args.instance_tags.pod }}"
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and (item.invocation.module_args.instance_tags.pod is defined)
+  changed_when: no
+  tags:
+    - addhost
+
+- name: Set facts on instances
+  set_fact:
+    ec2_tag_pod: "{{ item.invocation.module_args.instance_tags.pod }}"
+    ec2_tag_app: "{{ item.invocation.module_args.instance_tags.app }}"
+    ec2_tag_role: "{{ item.invocation.module_args.instance_tags.role }}"
+    ec2_ip_address: "{{ item.tagged_instances[0].public_ip }}"
+    ec2_private_ip_address: "{{ item.tagged_instances[0].private_ip }}"
+    ec2_private_dns_name: "{{ item.tagged_instances[0].private_dns_name }}"
+  with_items: "{{ instances.results }}"
+  delegate_to: "{{ item.tagged_instances[0].public_ip }}"
+  delegate_facts: yes
+  tags:
+    - addhost
