@@ -4,7 +4,7 @@ nodes:
     role: cfme
     app_name: management_lightbulb
     pod_name: student1
-    instance_type: m1.large
+    instance_type: t2.large
     image: ami-c74b98bd #cfme
     volumes:
       - device_name: /dev/sda1
