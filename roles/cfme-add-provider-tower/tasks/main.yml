@@ -4,7 +4,7 @@
     tower_public_ip: "{{ hostvars[item]['ec2_ip_address'] }}"
     tower_private_ip: "{{ hostvars[item]['ec2_private_ip_address'] }}"
     tower_dns_name: "{{ hostvars[item]['ec2_private_dns_name'] }}"
-  with_items: "{{ groups['tag_pod_'|join(ec2_tag_pod)] }}"
+  with_items: "{{ groups['tag_pod_' + ec2_tag_pod] }}"
   when: (hostvars[item]['ec2_tag_role'] == 'tower')
 
 - name: debug variable
