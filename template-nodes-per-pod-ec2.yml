@@ -1,6 +1,6 @@
 ---
 template_nodes:
-  - name: "{{ item }}-cfme"
+  - name: "{{ item.username }}-cfme"
     role: cfme
     app_name: management_lightbulb
     pod_name: "{{ item }}"
@@ -15,7 +15,7 @@ template_nodes:
         volume_type: gp2
         volume_size: 20
         delete_on_termination: true
-  - name: "{{ item }}-tower"
+  - name: "{{ item.username }}-tower"
     role: tower
     app_name: management_lightbulb
     pod_name: "{{ item }}"
