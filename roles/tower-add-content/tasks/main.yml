@@ -42,11 +42,18 @@
   ignore_errors: yes
   delay: 5
 
-- name: create job template nginx_test_job_template
-  command: tower-cli job_template create --name provision-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential ldo-ec2 --playbook nginx_full_ec2.yml --verbosity more_verbose --extra-vars "ec2_tag_Name=ec2_image=ami-d3c269c5 ec2_instance_type=m3.large ec2_volume_size=41"
-  register: nginx_test_job_template
+- name: create job template nginx_provision_job_template
+  command: tower-cli job_template create --name provision-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential ldo-ec2 --playbook nginx_full_ec2.yml --verbosity more_verbose --become-enabled True --extra-vars "ansible_user=centos ec2_key_name={{ ec2_key_name }} ec2_region={{ ec2_region }} ec2_name_prefix={{ ec2_name_prefix }} ec2_vpc_id={{ ec2_vpc_id }} ec2_vpc_subnet_id={{ ec2_vpc_subnet_id }} hosted_zone_domain_name=rhdemo.io subdomain={{ ec2_name_prefix }}-{{ ec2_tag_pod }}-nginx"
+  register: nginx_provision_job_template
   retries: 10
-  until: nginx_test_job_template.rc == 0
+  until: nginx_provision_job_template.rc == 0
   ignore_errors: yes
   delay: 5
 
+- name: create job template nginx_terminate_job_template
+  command: tower-cli job_template create --name provision-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential ldo-ec2 --playbook nginx_teardown_ec2.yml --verbosity more_verbose --become-enabled True --extra-vars "ansible_user=centos ec2_key_name={{ ec2_key_name }} ec2_region={{ ec2_region }} ec2_name_prefix={{ ec2_name_prefix }} ec2_vpc_id={{ ec2_vpc_id }} ec2_vpc_subnet_id={{ ec2_vpc_subnet_id }} hosted_zone_domain_name=rhdemo.io subdomain={{ ec2_name_prefix }}-{{ ec2_tag_pod }}-nginx"
+  register: nginx_terminate_job_template
+  retries: 10
+  until: nginx_terminate_job_template.rc == 0
+  ignore_errors: yes
+  delay: 5
