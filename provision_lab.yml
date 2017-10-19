@@ -53,7 +53,7 @@
         ec2_tag_role: "{{ item.invocation.module_args.instance_tags.role }}"
         ec2_ip_address: "{{ item.tagged_instances[0].public_ip }}"
         ec2_private_ip_address: "{{ item.tagged_instances[0].private_ip }}"
-        ec2_private_dns_name: "{{ item.tagged_instances[0].dns_name }}"
+        ec2_private_dns_name: "{{ item.tagged_instances[0].private_dns_name }}"
       with_items: "{{ instances.results }}"
       delegate_to: "{{ item.tagged_instances[0].public_ip }}"
       delegate_facts: yes
