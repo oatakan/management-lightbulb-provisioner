@@ -19,7 +19,7 @@
     - name: generate nodes list
       set_fact:
         nodes: "{{ nodes }} + {{ template_nodes }}"
-      with_nested:
+      with_items:
         - "{{ users }}"
 
     - debug:
