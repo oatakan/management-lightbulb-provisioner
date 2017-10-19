@@ -58,6 +58,19 @@
       delegate_to: "{{ item.tagged_instances[0].public_ip }}"
       delegate_facts: yes
 
+- name: provision tower
+  hosts: tag_role_tower:&tag_app_management_lightbulb
+  become: yes
+  remote_user: ec2-user
+  become_method: sudo
+  gather_facts: true
+  vars_files:
+    - "group_vars/all/vars"
+    - "group_vars/all/vault"
+  roles:
+    - provision-ansible-tower
+    - tower-add-content
+
 - name: provision cfme
   hosts: tag_role_cfme:&tag_app_management_lightbulb
   become: yes
@@ -71,15 +84,3 @@
     - provision-cfme
     - cfme-add-provider-ec2
     - cfme-add-provider-tower
-
-- name: provision tower
-  hosts: tag_role_tower:&tag_app_management_lightbulb
-  become: yes
-  remote_user: ec2-user
-  become_method: sudo
-  gather_facts: true
-  vars_files:
-    - "group_vars/all/vars"
-    - "group_vars/all/vault"
-  roles:
-    - provision-ansible-tower

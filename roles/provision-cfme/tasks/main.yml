@@ -42,7 +42,6 @@
 - name: apply settings.sql
   shell: sudo -i -u postgres psql -f /tmp/settings.sql vmdb_production
 
-# use handlers
 - name: restart evmserverd
   service: 
     name: evmserverd
