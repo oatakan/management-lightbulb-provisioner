@@ -1,14 +1,19 @@
-- hosts: localhost
+- name: provision ec2 instances
+  hosts: localhost
   become: no
   vars_files:
     - nodes-ec2.yml
   roles:
     - ansible-role-ec2
 
-- hosts: localhost
+- name: add hosts to groups
+  hosts: localhost
   become: no
   tasks:
-    - name: Add hosts to groups
+    - debug:
+        msg: "{{ instances.results }}"
+
+    - name: add cfme hosts to groups
       add_host:
         name: "{{ item.tagged_instances[0].public_ip }}"
         ansible_host: "{{ item.tagged_instances[0].public_ip }}"
@@ -19,7 +24,7 @@
       tags:
         - addhost
 
-    - name: Add hosts to groups
+    - name: add tower hosts to groups
       add_host:
         name: "{{ item.tagged_instances[0].public_ip }}"
         ansible_host: "{{ item.tagged_instances[0].public_ip }}"
@@ -30,9 +35,28 @@
       tags:
         - addhost
 
-- import_playbook: set_tower_facts.yml pod_name='{{ item }}'
-  with_items:
-    - student1
+    - name: add hosts to pod groups
+      add_host:
+        name: "{{ item.tagged_instances[0].public_ip }}"
+        ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+        groups: "tag_pod_{{ item.invocation.module_args.instance_tags.pod }}"
+      with_items: "{{ instances.results }}"
+      when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and (item.invocation.module_args.instance_tags.pod is defined)
+      changed_when: no
+      tags:
+        - addhost
+
+    - name: Set facts on instances
+      set_fact:
+        ec2_tag_pod: "{{ item.invocation.module_args.instance_tags.pod }}"
+        ec2_tag_app: "{{ item.invocation.module_args.instance_tags.app }}"
+        ec2_tag_role: "{{ item.invocation.module_args.instance_tags.role }}"
+        ec2_ip_address: "{{ item.tagged_instances[0].public_ip }}"
+        ec2_private_ip_address: "{{ item.tagged_instances[0].private_ip }}"
+        ec2_private_dns_name: "{{ item.tagged_instances[0].dns_name }}"
+      with_items: "{{ instances.results }}"
+      delegate_to: "{{ item.tagged_instances[0].public_ip }}"
+      delegate_facts: yes
 
 - name: provision cfme
   hosts: tag_role_cfme:&tag_app_management_lightbulb
