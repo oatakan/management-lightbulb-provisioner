@@ -1,4 +1,34 @@
 ---
+- name: Install EPEL
+  yum:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+  register: install_epel
+  until: install_epel|success
+  delay: 3
+  retries: 5
+
+- name: Install base packages
+  yum:
+    name:
+      - python-pip
+    state: latest
+    enablerepo: epel-testing
+  register: install_base_packages
+  until: install_base_packages|success
+  delay: 3
+  retries: 5
+
+- name: Install Ansible
+  pip:
+    name:
+      - ansible
+    state: latest
+  register: install_ansible
+  until: install_ansible|success
+  delay: 3
+  retries: 5
+
 - name: get tar for ansibletower
   get_url:
     url: http://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-{{ tower_version }}.el7.tar.gz
