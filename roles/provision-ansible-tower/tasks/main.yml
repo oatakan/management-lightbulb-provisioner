@@ -78,6 +78,11 @@
     status_code: 200
     body: "{{ tower_lic }}"
     body_format: json
+  register: add_license
+  retries: 10
+  until: add_license|success
+  ignore_errors: yes
+  delay: 5
 
 - name: install pip needed for manageiq-client
   yum:
