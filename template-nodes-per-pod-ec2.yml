@@ -3,7 +3,7 @@ template_nodes:
   - name: "{{ item.username }}-cfme"
     role: cfme
     app_name: management_lightbulb
-    pod_name: "{{ item }}"
+    pod_name: "{{ item.username }}"
     instance_type: t2.large
     image: ami-c74b98bd #cfme
     volumes:
@@ -18,7 +18,7 @@ template_nodes:
   - name: "{{ item.username }}-tower"
     role: tower
     app_name: management_lightbulb
-    pod_name: "{{ item }}"
+    pod_name: "{{ item.username }}"
     instance_type: t2.medium
     image: ami-85241def #rhel7-tower
     volumes:
