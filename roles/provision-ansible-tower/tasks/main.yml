@@ -106,8 +106,17 @@
 
 - name: fixing satellite6 kind /usr/lib/python2.7/site-packages/tower_cli/resources/credential.py
   template:
-    src: templates/credential.py
+    src: credential.py
     dest: /usr/lib/python2.7/site-packages/tower_cli/resources/credential.py
     mode: 0644
+    owner: root
+    group: root
+
+# see https://github.com/ansible/ansible/pull/31760
+- name: fixing cloudforms inventory script
+  template:
+    src: cloudforms.py
+    dest: /var/lib/awx/venv/awx/lib/python2.7/site-packages/awx/plugins/inventory/cloudforms.py
+    mode: 0755
     owner: root
     group: root
