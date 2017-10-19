@@ -7,9 +7,11 @@
 
 - name: add aws creds
   command: tower-cli credential create --kind aws --name=ldo-ec2 --organization=Default --username {{ ec2_access }} --password {{ ec2_secret }}
+  no_log: True
 
 - name: add ec2 creds
   command: tower-cli credential create --kind ssh --username ec2-user --user admin --organization Default --name ec2-user --ssh-key-data /tmp/private_key.pem
+  no_log: True
 
 - name: remove file
   file:

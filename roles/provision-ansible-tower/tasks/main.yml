@@ -91,6 +91,7 @@
 - name: install ansible-tower-cli
   pip:
     name: ansible-tower-cli
+    version: 3.1.4
 
 - name: copy tower-cli config /etc/tower/tower_cli.cfg
   template:
