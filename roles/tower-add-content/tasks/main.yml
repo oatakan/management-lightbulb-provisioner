@@ -27,7 +27,7 @@
   delay: 5
 
 - name: create group
-  command: tower-cli group create -n aws --credential ldo-ec2 -i aws --source ec2
+  command: tower-cli group create -n aws --credential ldo-ec2 -i aws --source ec2 --source-regions {{ ec2_region }} --instance-filters "tag:pod={{ ec2_tag_pod }},tag:name={{ ec2_name_prefix }}*,tag:app=management_lightbulb"
   register: group
   retries: 10
   until: group.rc == 0

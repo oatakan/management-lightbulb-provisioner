@@ -22,14 +22,9 @@
       with_items:
         - "{{ users }}"
 
-    - debug:
-        var: nodes
-
 - name: provision ec2 instances
   hosts: localhost
   become: no
-  #vars_files:
-  #  - nodes-ec2.yml
   roles:
     - ansible-role-ec2
 
