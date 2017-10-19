@@ -43,9 +43,9 @@
 
 - name: replace /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/roles/nginx/tasks/tasks.yml
   replace:
-    dest: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/roles/nginx/tasks/tasks.yml
-    regexp: 'www.ansible.com'
-    replace: "{{ ansible_nodename }}"
+    path: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/roles/nginx/tasks/tasks.yml
+    regexp: 'CN=localhost'
+    replace: "CN={{ ansible_nodename }}"
 
 - name: add /etc/tower path to setting.py
   lineinfile:
