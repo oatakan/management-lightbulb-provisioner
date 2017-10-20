@@ -21,7 +21,7 @@
   when: chrony_conf|changed
 
 - name: perform appliance basic configuration
-  shell: source /root/.bashrc && appliance_console_cli --host={{ inventory_hostname }} --region=99 --internal --password={{ cfme_pass }} --key --force-key --dbdisk=/dev/xvdb --sshpassword={{ root_password }} creates=/var/www/miq/vmdb/log/appliance_console.log
+  shell: source /root/.bashrc && appliance_console_cli --host={{ ec2_private_dns_name }} --region=99 --internal --password={{ cfme_pass }} --key --force-key --dbdisk=/dev/xvdb --sshpassword={{ root_password }} creates=/var/www/miq/vmdb/log/appliance_console.log
 
 - name: wait for cfme ui
   wait_for: host={{ inventory_hostname }} port=443 timeout=600
