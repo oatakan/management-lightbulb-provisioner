@@ -1,12 +1,4 @@
 ---
-- name: test file
-  template:
-    src: test.txt.j2
-    dest: ./{{ user.username }}-test.txt
-  with_items: "{{ users }}"
-  loop_control:
-    loop_var: user
-
 - name: Generate student inventories
   template:
     src: instances.txt.j2

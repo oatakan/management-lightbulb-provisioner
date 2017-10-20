@@ -46,6 +46,12 @@
     - user_accounts
     - common
 
+- name: configure control node
+  hosts: control_nodes
+  become: yes
+  roles:
+    - control-node
+
 - name: provision tower
   hosts: tag_role_tower:&tag_app_management_lightbulb
   become: yes

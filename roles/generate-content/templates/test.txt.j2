@@ -1,3 +1,0 @@
-{% for list in instances.results if list.invocation.module_args.instance_tags.pod == user.username %}
-{{ list.invocation.module_args.instance_tags.name }}
-{% endfor %}
