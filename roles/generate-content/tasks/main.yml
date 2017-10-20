@@ -1,11 +1,17 @@
 ---
-- debug:
-    var: instances.results
+#- debug:
+#    var: instances.results
+#
+#- name: debug output
+#  debug:
+#    msg: "{{ item.item.item.pod_name }}"
+#  with_items: "{{ instances.results|groupby('student1') }}"
 
-- name: debug output
-  debug:
-    msg: "{{ item.item.item.pod_name }}"
-  with_items: "{{ instances.results|groupby('student1') }}"
+- name: test file
+  template:
+    src: test.txt.j2
+    dest: ./{{ item.username }}-test.txt
+  with_items: "{{ users }}"
 
 - name: Generate student inventories
   template:
