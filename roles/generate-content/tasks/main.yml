@@ -1,6 +1,6 @@
 ---
 - debug:
-    var: instances.results|groupby('item')
+    msg: "{{ instances.results|groupby('item')[0] }}"
 
 - name: Generate student inventories
   template:
