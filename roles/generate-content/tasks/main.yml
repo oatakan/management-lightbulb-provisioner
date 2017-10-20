@@ -1,6 +1,9 @@
 ---
 - debug:
-    msg: "{{ instances.results|groupby('item')[0] }}"
+    msg: "{{ result_item['item'][0] }}"
+  with_items: "{{ instances.results|groupby('item') }}"
+  loop_control:
+    loop_var: result_item
 
 - name: Generate student inventories
   template:
