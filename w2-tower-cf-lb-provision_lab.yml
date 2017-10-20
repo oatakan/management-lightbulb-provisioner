@@ -34,9 +34,10 @@
   become: no
   roles:
     - create-runtime-inventory
+    - generate-content
 
 - name: configure common options on all nodes
-  hosts: tag_app_management_lightbulb
+  hosts: tag_app_management_lightbulb:!tag_role_hosting
   become: yes
   remote_user: ec2-user
   become_method: sudo
