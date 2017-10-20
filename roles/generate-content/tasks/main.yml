@@ -4,11 +4,10 @@
 
 - name: debug output
   debug:
-    msg: "{{ result_item.item.name}}"
+    msg: "{{ result_item.item.item.pod_name}}"
   with_items: "{{ instances.results|groupby('item') }}"
   loop_control:
     loop_var: result_item
-  when: result_item['item'] is defined
 
 - name: Generate student inventories
   template:
