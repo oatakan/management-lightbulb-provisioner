@@ -1,3 +1,7 @@
+---
+- debug:
+    var: instances.results|groupby('item')
+
 - name: Generate student inventories
   template:
     src: instances.txt.j2
