@@ -1,5 +1,3 @@
 {% for list in instances.results if list.invocation.module_args.instance_tags.pod == user.username %}
-{% for vm in list %}
-{{ vm.invocation.module_args.instance_tags.name }}
-{% endfor %}
+{{ list.invocation.module_args.instance_tags.name }}
 {% endfor %}
