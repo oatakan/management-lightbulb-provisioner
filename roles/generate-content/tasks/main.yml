@@ -4,6 +4,7 @@
   with_items: "{{ instances.results|groupby('item') }}"
   loop_control:
     loop_var: result_item
+  when: result_item['item'] is defined
 
 - name: Generate student inventories
   template:
