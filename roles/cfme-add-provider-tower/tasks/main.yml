@@ -45,6 +45,7 @@
     validate_certs: no
     body_format: json
     body: "{{ lookup('template', 'tower_provider.json.j2') | to_json }}"
+  ignore_errors: yes
 
 - name: create cfme creds
   command: tower-cli credential create -n cloudforms --kind cloudforms --username admin  --password {{ cfme_pass }} --host https://{{ inventory_hostname }} --organization Default

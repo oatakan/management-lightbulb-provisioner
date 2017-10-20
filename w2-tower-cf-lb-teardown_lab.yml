@@ -14,7 +14,6 @@
 
     - name: delete Router ELB DNS Entry if it doesn't exist
       route53:
-        #state: present ## Added in Ansible 2.4 will remove need for when statement below
         command: delete
         zone: "{{ hosted_zone_domain_name }}"
         record: "{{ ec2_name_prefix }}.{{ hosted_zone_domain_name }}"
