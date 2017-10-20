@@ -11,3 +11,9 @@ ec2_private_key: "{{ vault_ec2_private_key }}"
 
 student_count_start: 1
 student_count_end: 1
+
+workshop_names:
+  - w1-ansible-tower-lb
+  - w2-tower-cf-lb
+
+workshop_name: w1-ansible-tower-lb

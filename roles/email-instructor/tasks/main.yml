@@ -8,7 +8,7 @@
     body: |
           Attached is the Ansible inventory to be used for training.<br>
           Please check your ability to connect to each of the hosts via ssh.<br>
-          {% if 'hosting_nodes' in groups %}
+          {% if 'tag_role_hosting' in groups %}
           {% if hosted_zone_domain_name is defined %}
           Log in to: http://{{ ec2_name_prefix | lower }}.{{ hosted_zone_domain_name }}<br>
           {% endif %}

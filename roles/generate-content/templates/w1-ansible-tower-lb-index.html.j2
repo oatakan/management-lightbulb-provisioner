@@ -85,14 +85,14 @@ ansible_port={{ ssh_port }}<br />
 <br />
 [cfme]<br />
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'cfme' not in vm.invocation.module_args.instance_tags.role%}
+{% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
 {{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
 {% endif %}
 {% endfor %}
 <br />
 [tower]<br />
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'tower' not in vm.invocation.module_args.instance_tags.role%}
+{% if 'tower' in vm.invocation.module_args.instance_tags.role %}
 {{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
 {% endif %}
 {% endfor %}

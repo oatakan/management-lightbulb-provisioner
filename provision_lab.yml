@@ -5,7 +5,7 @@
   gather_facts: no
   vars_files:
     - hosting-node-ec2.yml
-    - w1-ansible-tower-lb-template-nodes-ec2.yml
+    - "{{ workshop_name }}-template-nodes-ec2.yml"
   tasks:
     - name: generate users list
       set_fact:
