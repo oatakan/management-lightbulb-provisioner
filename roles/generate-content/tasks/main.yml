@@ -5,7 +5,7 @@
 - name: debug output
   debug:
     msg: "{{ item.item.item.pod_name }}"
-  with_items: "{{ instances.results }}"
+  with_items: "{{ instances.results|groupby('item') }}"
 
 - name: Generate student inventories
   template:
