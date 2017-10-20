@@ -5,7 +5,6 @@ ansible_ssh_pass={{ admin_password }}
 ansible_port={{ ssh_port }}
 {% endif %}
 
-{% if instances.results is defined %}
 [cfme]
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == item.username %}
 {% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
