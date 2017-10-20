@@ -1,4 +1,28 @@
 ---
+- name: add hosts to control_nodes group
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_user: ec2-user
+    groups: lab_hosts,control_nodes
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('control' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - provision
+
+- name: add hosts to groups
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_user: ec2-user
+    groups: lab_hosts,managed_nodes
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('control' not in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - provision
+
 - name: add cfme hosts to groups
   add_host:
     name: "{{ item.tagged_instances[0].public_ip }}"
@@ -32,6 +56,16 @@
   tags:
     - addhost
 
+- name: add hosts to hosting_nodes group
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_hosting,tag_app_management_lightbulb
+  changed_when: no
+  tags:
+    - provision
+    - hosting
+
 - name: Set facts on instances
   set_fact:
     ec2_tag_pod: "{{ item.invocation.module_args.instance_tags.pod }}"
@@ -40,6 +74,7 @@
     ec2_ip_address: "{{ item.tagged_instances[0].public_ip }}"
     ec2_private_ip_address: "{{ item.tagged_instances[0].private_ip }}"
     ec2_private_dns_name: "{{ item.tagged_instances[0].private_dns_name }}"
+    username: "{{ item.invocation.module_args.instance_tags.pod }}"
   with_items: "{{ instances.results }}"
   delegate_to: "{{ item.tagged_instances[0].public_ip }}"
   delegate_facts: yes

@@ -1,0 +1,27 @@
+- name: copy index.html
+  copy:
+    src: index.html
+    dest: /usr/share/nginx/html/index.html
+
+- name: set selinux
+  sefcontext:
+    target: '/usr/share/nginx/html'
+    setype: httpd_sys_content_t
+    state: present
+  when: ansible_selinux.status is defined and ansible_selinux.status == "enabled"
+
+- name: proper response from nginx is received
+  uri:
+    url: http://{{ inventory_hostname }}/
+    return_content: yes
+    validate_certs: no
+  register: response
+  until: "'Lightbulb Workshop' in response.content"
+  retries: 2
+  delay: 1
+  ignore_errors: yes
+
+- name: output url
+  debug:
+    msg: 'application is available at http://{{ inventory_hostname }}/'
+  when: response | success

@@ -1,0 +1,45 @@
+- name: terminate ec2 instances
+  hosts: localhost
+  become: no
+  tasks:
+    - name: get record for router ELB DNS Entry
+      route53:
+        command: get
+        zone: "{{ hosted_zone_domain_name }}"
+        record: "{{ ec2_name_prefix }}.{{ hosted_zone_domain_name }}"
+        type: A
+      register: routerelbrec
+      when: hosted_zone_domain_name is defined and ec2_name_prefix is defined
+      ignore_errors: yes
+
+    - name: delete Router ELB DNS Entry if it doesn't exist
+      route53:
+        #state: present ## Added in Ansible 2.4 will remove need for when statement below
+        command: delete
+        zone: "{{ hosted_zone_domain_name }}"
+        record: "{{ ec2_name_prefix }}.{{ hosted_zone_domain_name }}"
+        type: A
+        value: "{{ routerelbrec.set.value }}"
+      when: routerelbrec.set is defined and "{} != routerelbrec.set"
+      ignore_errors: yes
+
+    - name: get ec2 instance information
+      ec2_instance_facts:
+        region: "{{ ec2_region }}"
+        filters:
+          vpc-id: "{{ ec2_vpc_id }}"
+          "tag:app": management_lightbulb
+      register: ec2_instances
+
+    - name: terminate instances
+      ec2:
+        region: "{{ ec2_region }}"
+        state: "absent"
+        instance_ids: "{{ ec2_instances.instances | map(attribute='instance_id') | list }}"
+
+  post_tasks:
+    - name: Remove inventory files
+      file: path="{{ item }}" state=absent
+      with_fileglob: "{{ playbook_dir }}/*.txt"
+      register: removal
+      changed_when: removal|success

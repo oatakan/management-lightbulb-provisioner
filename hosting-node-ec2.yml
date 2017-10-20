@@ -1,0 +1,13 @@
+---
+hosting_nodes:
+  - name: "{{ item.username }}-hosting"
+    role: hosting
+    app_name: management_lightbulb
+    pod_name: "{{ item.username }}"
+    instance_type: t2.micro
+    image: ami-85241def #rhel7
+    volumes:
+      - device_name: /dev/sda1
+        volume_type: gp2
+        volume_size: 10
+        delete_on_termination: true
