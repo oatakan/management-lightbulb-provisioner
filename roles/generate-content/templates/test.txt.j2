@@ -1,4 +1,4 @@
-{% for grouper, list in instances.results|groupby('invocation.module_args.instance_tags.pod_name') if grouper.invocation.module_args.instance_tags.pod_name == user.username %}
+{% for grouper, list in instances.results|groupby('invocation.module_args.instance_tags.pod') if grouper.invocation.module_args.instance_tags.pod == user.username %}
 {% for vm in list %}
 {{ vm.invocation.module_args.instance_tags.name }}
 {% endfor %}
