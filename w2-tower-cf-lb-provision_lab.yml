@@ -23,6 +23,9 @@
       with_items:
         - "{{ users }}"
 
+    - debug:
+        var: nodes
+
 - name: provision ec2 instances
   hosts: localhost
   become: no
