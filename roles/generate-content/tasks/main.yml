@@ -4,7 +4,7 @@
 
 - name: debug output
   debug:
-    msg: "{{ item.item.pod_name }}"
+    msg: "{{ item.item.item.pod_name }}"
   with_items: "{{ instances.results }}"
 
 - name: Generate student inventories
