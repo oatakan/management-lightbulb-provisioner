@@ -6,7 +6,7 @@
     create: yes
 
 - name: add aws creds
-  command: tower-cli credential create --kind aws --name=ldo-ec2 --organization=Default --username {{ ec2_access }} --password {{ ec2_secret }}
+  command: tower-cli credential create --kind aws --name=oa-ec2 --organization=Default --username {{ ec2_access }} --password {{ ec2_secret }}
   no_log: True
 
 - name: add ec2 creds
@@ -27,7 +27,7 @@
   delay: 5
 
 - name: create group
-  command: tower-cli group create -n aws --credential ldo-ec2 -i aws --source ec2 --source-regions {{ ec2_region }} --instance-filters "tag:name={{ ec2_name_prefix }}-{{ ec2_tag_pod }}*"
+  command: tower-cli group create -n aws --credential oa-ec2 -i aws --source ec2 --source-regions {{ ec2_region }} --instance-filters "tag:name={{ ec2_name_prefix }}-{{ ec2_tag_pod }}*"
   register: group
   retries: 10
   until: group.rc == 0
@@ -43,7 +43,7 @@
   delay: 5
 
 - name: create job template nginx_provision_job_template
-  command: tower-cli job_template create --name provision-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential ldo-ec2 --playbook nginx_full_ec2.yml --verbosity more_verbose --become-enabled True --extra-vars "ansible_user=centos ec2_key_name={{ ec2_key_name }} ec2_region={{ ec2_region }} ec2_name_prefix={{ ec2_name_prefix }} ec2_vpc_id={{ ec2_vpc_id }} ec2_vpc_subnet_id={{ ec2_vpc_subnet_id }} hosted_zone_domain_name=rhdemo.io subdomain={{ ec2_name_prefix }}-{{ ec2_tag_pod }}-nginx"
+  command: tower-cli job_template create --name provision-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential oa-ec2 --playbook nginx_full_ec2.yml --verbosity more_verbose --become-enabled True --extra-vars "ansible_user=centos ec2_key_name={{ ec2_key_name }} ec2_region={{ ec2_region }} ec2_name_prefix={{ ec2_name_prefix }} ec2_vpc_id={{ ec2_vpc_id }} ec2_vpc_subnet_id={{ ec2_vpc_subnet_id }} hosted_zone_domain_name=rhdemo.io subdomain={{ ec2_name_prefix }}-{{ ec2_tag_pod }}-nginx"
   register: nginx_provision_job_template
   retries: 10
   until: nginx_provision_job_template.rc == 0
@@ -51,7 +51,7 @@
   delay: 5
 
 - name: create job template nginx_terminate_job_template
-  command: tower-cli job_template create --name terminate-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential ldo-ec2 --playbook nginx_teardown_ec2.yml --verbosity more_verbose --become-enabled True --extra-vars "ansible_user=centos ec2_key_name={{ ec2_key_name }} ec2_region={{ ec2_region }} ec2_name_prefix={{ ec2_name_prefix }} ec2_vpc_id={{ ec2_vpc_id }} ec2_vpc_subnet_id={{ ec2_vpc_subnet_id }} hosted_zone_domain_name=rhdemo.io subdomain={{ ec2_name_prefix }}-{{ ec2_tag_pod }}-nginx"
+  command: tower-cli job_template create --name terminate-nginx-on-ec2 --project=ansible-nginx-example --inventory=aws --machine-credential ec2-user --cloud-credential oa-ec2 --playbook nginx_teardown_ec2.yml --verbosity more_verbose --become-enabled True --extra-vars "ansible_user=centos ec2_key_name={{ ec2_key_name }} ec2_region={{ ec2_region }} ec2_name_prefix={{ ec2_name_prefix }} ec2_vpc_id={{ ec2_vpc_id }} ec2_vpc_subnet_id={{ ec2_vpc_subnet_id }} hosted_zone_domain_name=rhdemo.io subdomain={{ ec2_name_prefix }}-{{ ec2_tag_pod }}-nginx"
   register: nginx_terminate_job_template
   retries: 10
   until: nginx_terminate_job_template.rc == 0
