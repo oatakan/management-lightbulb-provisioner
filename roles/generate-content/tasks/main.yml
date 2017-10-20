@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg: "{{ result_item['item'][0] }}"
+    msg: "{{ result_item['item'] }}"
   with_items: "{{ instances.results|groupby('item') }}"
   loop_control:
     loop_var: result_item
