@@ -5,6 +5,7 @@ ansible_ssh_pass={{ admin_password }}
 ansible_port={{ ssh_port }}
 {% endif %}
 
+{% if instances.results is defined %}
 [web]
 {% for grouper, list in instances.results|groupby('item') if grouper.item[0] == item %}
 {% for vm in list %}
@@ -40,3 +41,4 @@ grafana ansible_host={{ vm.tagged_instances[0].public_ip }}
 {% endif %}
 {% endfor %}
 {% endfor %}
+{% endif %}
