@@ -15,7 +15,7 @@
 
     - name: initialize nodes variable
       set_fact:
-        nodes: ["{{ hosting_nodes }}"]
+        nodes: "{{ hosting_nodes }}"
 
     - name: generate nodes list
       set_fact:

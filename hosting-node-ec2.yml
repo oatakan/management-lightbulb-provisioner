@@ -1,5 +1,5 @@
 ---
-hosting_nodes:
+nodes:
   - name: "main-hosting"
     role: hosting
     app_name: management_lightbulb
