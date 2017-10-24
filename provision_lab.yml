@@ -85,6 +85,7 @@
   roles:
     - provision-dns-ec2
     - nginx
+    - hosting-generate-html
     - hosting-upload-content
 
 - name: email inventory to instructor
