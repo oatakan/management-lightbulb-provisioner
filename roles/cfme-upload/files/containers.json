@@ -1,0 +1,10 @@
+[
+  {
+  "Description": "cfme5823-1",
+  "Format": "vhd",
+  "UserBucket": {
+        "S3Bucket": "oa-cfmeeast",
+	"S3Key": "cfme-ec2-5.8.2.3-1.x86_64.vhd"
+      }
+  }
+]

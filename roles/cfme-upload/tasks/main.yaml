@@ -1,0 +1,32 @@
+---
+- name: create an s3 bucket
+  s3_bucket:
+    name: "{{ s3_bucket_name }}"
+
+- name: upload image
+  aws_s3:
+    bucket: "{{ s3_bucket_name }}"
+    object: "{{ image_name }}"
+    src: "{{ image_location }}{{ image_name }}"
+    mode: put
+    overwrite: no
+
+- name: set trust policy
+  iam:
+    iam_type: role
+    name: trust-policy.json
+    trust_policy: "{{ trust_policy|to_json }}"
+    state: present
+  ignore_errors: yes
+
+- name: set vmimport policy
+  iam_policy:
+    iam_type: role
+    iam_name: vmimport
+    policy_name: vmimport
+    policy_json: "{{ role_policy|to_json }}"
+    state: present
+  ignore_errors: yes
+
+- name: import-image using cli because cant find ec2 import
+  shell: aws ec2 import-image --description '{{ image_short_name }}' --disk-containers '{{ containers|to_json }}'

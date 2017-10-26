@@ -1,0 +1,6 @@
+- name: Upload CloudForms image to EC2
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - cfme-upload

@@ -1,0 +1,44 @@
+s3_bucket_name: oa-cfmeeast
+image_name: cfme-ec2-5.8.2.3-1.x86_64.vhd
+image_location: ../../Downloads/
+image_short_name: cfme5823-1
+
+containers:
+  - Description: "{{ image_short_name }}"
+    Format: vhd
+    UserBucket:
+      S3Bucket: "{{ s3_bucket_name }}"
+      S3Key: "{{ image_name }}"
+
+role_policy:
+  Version: '2012-10-17'
+  Statement:
+  - Effect: Allow
+    Action:
+    - s3:ListBucket
+    - s3:GetBucketLocation
+    Resource:
+    - arn:aws:s3:::{{ s3_bucket_name }}
+  - Effect: Allow
+    Action:
+    - s3:GetObject
+    Resource:
+    - arn:aws:s3:::{{ s3_bucket_name }}/*
+  - Effect: Allow
+    Action:
+    - ec2:ModifySnapshotAttribute
+    - ec2:CopySnapshot
+    - ec2:RegisterImage
+    - ec2:Describe*
+    Resource: "*"
+
+trust_policy:
+  Version: '2012-10-17'
+  Statement:
+  - Effect: Allow
+    Principal:
+      Service: vmie.amazonaws.com
+    Action: sts:AssumeRole
+    Condition:
+      StringEquals:
+        sts:Externalid: vmimport
