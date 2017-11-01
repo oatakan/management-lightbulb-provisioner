@@ -11,18 +11,12 @@
       ec2_ami_find:
         name: "{{ image_names['rhel-74'] }}"
         region: "{{ ec2_region }}"
-        sort: name
-        sort_order: descending
-        sort_end: 1
       register: rhel7_ami_find
 
     - name: find ami for cfme
       ec2_ami_find:
         name: "{{ image_names['cfme-58'] }}"
         region: "{{ ec2_region }}"
-        sort: name
-        sort_order: descending
-        sort_end: 1
       register: cfme_ami_find
 
     - name: set ami id for rhel7
