@@ -21,12 +21,12 @@
 
     - name: set ami id for rhel7
       set_fact:
-        rhel7_ami_id: "{{ rhel7_ami_find.results[0] }}"
+        rhel7_ami_id: "{{ rhel7_ami_find.results[0].ami_id }}"
       when: rhel7_ami_find.results is defined
 
     - name: set ami id for cfme
       set_fact:
-        cfme_ami_id: "{{ cfme_ami_find.results[0] }}"
+        cfme_ami_id: "{{ cfme_ami_find.results[0].ami_id }}"
       when: cfme_ami_find.results is defined
 
     - debug:
