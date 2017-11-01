@@ -10,6 +10,7 @@
     - name: find ami for rhel7
       ec2_ami_find:
         name: "{{ image_names['rhel-74'] }}"
+        region: "{{ ec2_region }}"
         sort: name
         sort_order: descending
         sort_end: 1
@@ -18,6 +19,7 @@
     - name: find ami for cfme
       ec2_ami_find:
         name: "{{ image_names['cfme'] }}"
+        region: "{{ ec2_region }}"
         sort: name
         sort_order: descending
         sort_end: 1
