@@ -18,7 +18,7 @@
 
     - name: find ami for cfme
       ec2_ami_find:
-        name: "{{ image_names['cfme'] }}"
+        name: "{{ image_names['cfme-58'] }}"
         region: "{{ ec2_region }}"
         sort: name
         sort_order: descending
