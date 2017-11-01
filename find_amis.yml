@@ -17,7 +17,6 @@
       ec2_ami_find:
         name: "{{ image_names['cfme-58'] }}"
         region: "{{ ec2_region }}"
-        is_public: no
       register: cfme_ami_find
 
     - debug:
