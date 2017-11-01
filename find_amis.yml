@@ -17,10 +17,14 @@
       ec2_ami_find:
         name: "{{ image_names['cfme-58'] }}"
         region: "{{ ec2_region }}"
+        is_public: no
       register: cfme_ami_find
 
     - debug:
         var: rhel7_ami_find
+
+    - debug:
+        var: cfme_ami_find
 
     - name: set ami id for rhel7
       set_fact:
