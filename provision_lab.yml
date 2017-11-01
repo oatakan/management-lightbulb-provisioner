@@ -1,3 +1,5 @@
+- import_playbook: find_amis.yml
+
 - name: Generate users and nodes lists
   hosts: localhost
   connection: local

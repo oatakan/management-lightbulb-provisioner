@@ -19,12 +19,6 @@
         region: "{{ ec2_region }}"
       register: cfme_ami_find
 
-    - debug:
-        var: rhel7_ami_find
-
-    - debug:
-        var: cfme_ami_find
-
     - name: set ami id for rhel7
       set_fact:
         rhel7_ami_id: "{{ rhel7_ami_find.results[0].ami_id }}"

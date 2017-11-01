@@ -5,7 +5,7 @@ hosting_nodes:
     app_name: management_lightbulb
     pod_name: "main"
     instance_type: t2.micro
-    image: ami-85241def #rhel7
+    image: "{{ rhel7_ami_id|default('ami-85241def') }}" #rhel7
     volumes:
       - device_name: /dev/sda1
         volume_type: gp2
