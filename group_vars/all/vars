@@ -20,3 +20,7 @@ workshop_name: w1-ansible-tower-lb
 
 workshop_content_git_repo_url: https://github.com/oatakan/ansible-workshop.git
 workshop_ascii_doc_file_name: doc/ansible-workshop-lab-guide.adoc
+
+image_names:
+  rhel-74: 'RHEL-7.4_HVM_GA-20170808-x86_64-2-Hourly2-GP2'
+  cfme-58: 'Red Hat CloudForms 4.5'

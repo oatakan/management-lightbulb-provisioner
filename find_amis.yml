@@ -1,0 +1,40 @@
+- name: Find amis
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  vars_files:
+    - "group_vars/all/vars"
+    - "group_vars/all/vault"
+  tasks:
+    - name: find ami for rhel7
+      ec2_ami_find:
+        name: "{{ image_names['rhel-74'] }}"
+        sort: name
+        sort_order: descending
+        sort_end: 1
+      register: rhel7_ami_find
+
+    - name: find ami for cfme
+      ec2_ami_find:
+        name: "{{ image_names['cfme'] }}"
+        sort: name
+        sort_order: descending
+        sort_end: 1
+      register: cfme_ami_find
+
+    - name: set ami id for rhel7
+      set_fact:
+        rhel7_ami_id: "{{ rhel7_ami_find.results[0] }}"
+      when: rhel7_ami_find.results is defined
+
+    - name: set ami id for cfme
+      set_fact:
+        cfme_ami_id: "{{ cfme_ami_find.results[0] }}"
+      when: cfme_ami_find.results is defined
+
+    - debug:
+        var: rhel7_ami_id
+
+    - debug:
+        var: cfme_ami_id
