@@ -1,0 +1,11 @@
+---
+- name: install wetty
+  npm:
+    name: wetty
+    global: yes
+
+#- name: main config
+#  copy:
+#    src: nginx-wetty.conf
+#    dest: /etc/nginx/nginx-wetty.conf
+#  notify: reload nginx

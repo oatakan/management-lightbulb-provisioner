@@ -47,6 +47,8 @@
   roles:
     - user_accounts
     - common
+    - geerlingguy.nodejs
+    - wetty
 
 - name: configure control node
   hosts: control_nodes
