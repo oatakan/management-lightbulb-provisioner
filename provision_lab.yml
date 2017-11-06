@@ -47,6 +47,7 @@
   roles:
     - user_accounts
     - common
+    - geerlingguy.repo-epel
     - geerlingguy.nodejs
     - wetty
 

@@ -1,4 +1,6 @@
 - src: https://github.com/oatakan/ansible-role-ec2
   version: origin/master
 
+- src: geerlingguy.repo-epel
+
 - src: geerlingguy.nodejs
