@@ -1,4 +1,10 @@
 ---
+
+- name: install prereq gcc-c++ package
+  yum:
+    name: gcc-c++
+    state: present
+
 - name: install wetty
   npm:
     name: wetty
