@@ -1,19 +1,8 @@
-# systemd unit file
-#
-# place in /etc/systemd/system
-# systemctl enable wetty.service
-# systemctl start wetty.service
-
 [Unit]
-Description=Wetty Web Terminal
-After=network.target
-
+Description="WETTY: Terminal over HTTP and HTTPS. https://github.com/krishnasrinivas/wetty"
+After=network.target auditd.service
 [Service]
-User=root
-Group=root
-
-WorkingDirectory=/usr/local/lib/npm/lib/node_modules/wetty
-ExecStart=/usr/bin/node app.js -p {{ wetty_port }}
-
+ExecStart=/usr/lib/node_modules/wetty/bin/wetty.js --sslkey /home/{{ system_user }}/.ssh/privkey.pem --sslcert /home/{{ system_user }}/.ssh/cert.pem -p {{ wetty_port }}
+Restart=always
 [Install]
 WantedBy=multi-user.target

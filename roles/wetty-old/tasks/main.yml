@@ -1,0 +1,27 @@
+---
+- name: install prereq gcc-c++ package
+  yum:
+    name: gcc-c++
+    state: present
+
+- name: install wetty
+  npm:
+    name: wetty
+    global: yes
+
+- name: add wetty service config
+  template:
+    src: wetty.service.j2
+    dest: /etc/systemd/system/wetty.service
+
+- name: enable and start wetty service
+  service:
+    name: wetty
+    state: started
+    enabled: yes
+
+#- name: main config
+#  copy:
+#    src: nginx-wetty.conf
+#    dest: /etc/nginx/nginx-wetty.conf
+#  notify: reload nginx

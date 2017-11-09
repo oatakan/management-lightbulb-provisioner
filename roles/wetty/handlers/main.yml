@@ -1,5 +1,9 @@
-- name: reload nginx
-  service: name=nginx state=reloaded
+# file: roles/wetty/handlers/main.yml
+---
+# For example,
+# 
+- name: wetty
+  service: name=wetty state=restarted
 
-- name: restart nginx
-  service: name=nginx state=restarted
+- name: sshd
+  service: name=sshd state=restarted

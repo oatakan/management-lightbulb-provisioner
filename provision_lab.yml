@@ -47,15 +47,15 @@
   roles:
     - user_accounts
     - common
-    - ansible-role-repo-epel
-    - geerlingguy.nodejs
-    - wetty
 
 - name: configure control node
   hosts: control_nodes
   become: yes
   roles:
     - control-node
+    - geerlingguy.repo-epel
+    - geerlingguy.nodejs
+    - wetty
 
 - name: provision tower
   hosts: tag_role_tower:&tag_app_management_lightbulb
