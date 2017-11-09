@@ -10,6 +10,17 @@
     name: wetty
     global: yes
 
+- name: add wetty service config
+  template:
+    src: wetty.service.j2
+    dest: /etc/systemd/system/wetty.service
+
+- name: enable and start wetty service
+  service:
+    name: wetty
+    state: started
+    enabled: yes
+
 #- name: main config
 #  copy:
 #    src: nginx-wetty.conf
