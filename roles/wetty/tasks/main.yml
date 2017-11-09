@@ -107,7 +107,7 @@
 - name: Open port in Firewall
   become: yes
   firewalld:
-    port: "{{ wetty_port }}"/tcp
+    port: "{{ wetty_port }}/tcp"
     permanent: true
     zone: public
     state: enabled
