@@ -36,6 +36,15 @@
 #-------------------------------------------------------
 # Self-Signed Certs 
 #-------------------------------------------------------
+- name: Create .ssh directory in user home
+  become: yes
+  file:
+    path: /home/{{ system_user }}/.ssh
+    state: directory
+    group:   "{{ system_user }}"
+    owner:   "{{ system_user }}"
+    mode: 0400
+
 - name: Generate Self Signed Certs
   command: >
     openssl req -new
