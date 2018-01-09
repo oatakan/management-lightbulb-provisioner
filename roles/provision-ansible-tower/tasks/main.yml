@@ -62,6 +62,10 @@
 - name: execute the tower installation
   command: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/setup.sh
   register: towerinstall
+  until: towerinstall.rc == 0
+  retries: 3
+  delay: 15
+  ignore_errors: yes
 
 - name: change perms on tower.cert
   file:
