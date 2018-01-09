@@ -77,6 +77,21 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
   <div data-role="main" class="ui-content">
     <div data-role="collapsible">
       <h1>{{ user.username }} - Click to see details!</h1>
+      <h2>Use the links below</h2><br />
+      CloudForms URL (root/smartvm):
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
+<a href="http://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }}" target="cf_url_{{ user.username }}">http://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }}</a><br />
+{% endif %}
+{% endfor %}<br />
+      Ansible Tower URL (admin/{{ admin_password }}):
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'tower' in vm.invocation.module_args.instance_tags.role %}
+<a href="https://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }}" target="tower_url_{{ user.username }}">https://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} }}</a><br />
+{% endif %}
+{% endfor %}
+<br />
+      <h2>Inventory</h2>
       <p>[all:vars]<br />
 ansible_user={{ user.username }}<br />
 ansible_ssh_pass={{ admin_password }}<br />
