@@ -32,11 +32,11 @@
 - name: get tar for ansibletower
   get_url:
     url: http://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-{{ tower_version }}.el7.tar.gz
-    dest: /tmp/ansible-tower-setup-bundle.tar.gz
+    dest: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7.tar.gz
 
-- name: untar /tmp/ansible-tower-setup-bundle.tar.gz
+- name: untar /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7.tar.gz
   unarchive:
-    src: /tmp/ansible-tower-setup-bundle.tar.gz
+    src: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7.tar.gz
     dest: /tmp/
     remote_src: true
     owner: root
