@@ -81,13 +81,13 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
       CloudForms URL (admin/{{ cfme_pass }}):
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
 {% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
-<a href="http://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }}" target="cf_url_{{ user.username }}">http://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }}</a><br />
+<a href="http://{{ vm.tagged_instances[0].public_ip }}" target="cf_url_{{ user.username }}">http://{{ vm.tagged_instances[0].public_ip }}</a><br />
 {% endif %}
 {% endfor %}<br />
       Ansible Tower URL (admin/{{ tower_pass }}):
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
 {% if 'tower' in vm.invocation.module_args.instance_tags.role %}
-<a href="https://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }}" target="tower_url_{{ user.username }}">https://{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} }}</a><br />
+<a href="https://{{ vm.tagged_instances[0].public_ip }}" target="tower_url_{{ user.username }}">https://{{ vm.tagged_instances[0].public_ip }}</a><br />
 {% endif %}
 {% endfor %}
 <br />
