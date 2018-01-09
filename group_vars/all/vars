@@ -3,7 +3,7 @@ ec2_access: "{{ lookup('env', 'AWS_ACCESS_KEY_ID')|default(vault_ec2_access) }}"
 ec2_secret: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY')|default(vault_ec2_secret) }}"
 tower_pass: "{{ vault_tower_pass }}"
 cfme_pass: "{{ vault_cfme_pass }}"
-tower_version: 3.2.2
+tower_version: 3.2.2-1
 git_url: "https://github.com/oatakan/nginx-ansible-example.git"
 root_password: "{{ vault_root_password }}"
 tower_lic: "{{ vault_tower_lic }}"
