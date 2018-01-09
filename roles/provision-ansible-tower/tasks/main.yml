@@ -57,8 +57,6 @@
     src: templates/towerinventorysetup
     dest: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/inventory
 
-- pause:
-
 - name: execute the tower installation
   command: /tmp/ansible-tower-setup-bundle-{{ tower_version }}.el7/setup.sh
   register: towerinstall
