@@ -1,9 +1,9 @@
 {
   "type":"ManageIQ::Providers::Amazon::CloudManager",
-  "name":"Amazon {{ ec2_region }}",
-  "provider_region": "{{ ec2_region }}",
+  "name":"Amazon {{ student_ec2_region }}",
+  "provider_region": "{{ student_ec2_region }}",
   "credentials" : {
-    "userid"    : "{{ ec2_access }}",
-    "password"  : "{{ ec2_secret }}"
+    "userid"    : "{{ student_ec2_access }}",
+    "password"  : "{{ student_ec2_secret }}"
   }
 }
