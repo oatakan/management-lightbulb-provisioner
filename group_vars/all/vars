@@ -10,7 +10,7 @@ tower_lic: "{{ vault_tower_lic }}"
 ec2_private_key: "{{ vault_ec2_private_key }}"
 
 student_ec2_key_name: "{{ vault_student_ec2_key_name }}"
-student_ec2_name_prefix: "{{ vault_student_ec2_name_prefix }}"
+student_ec2_name_prefix: "{{ ec2_name_prefix }}"
 student_ec2_region: "{{ vault_student_ec2_region }}"
 student_ec2_vpc_id: "{{ vault_student_ec2_vpc_id }}"
 student_ec2_vpc_subnet_id: "{{ vault_student_ec2_vpc_subnet_id }}"
