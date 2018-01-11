@@ -28,6 +28,7 @@
         filters:
           vpc-id: "{{ ec2_vpc_id }}"
           "tag:app": management_lightbulb
+          "tag:name": "{{ ec2_name_prefix }}-*"
       register: ec2_instances
 
     - name: terminate instances
