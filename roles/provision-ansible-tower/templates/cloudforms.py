@@ -349,9 +349,15 @@ class CloudFormsInventory(object):
                         # Add the host to the last tag
                         self.push(self.inventory[safe_parent_tag_name], 'hosts', host['name'])
 
-            # Set ansible_ssh_host to the first available ip address
+            # Set ansible_ssh_host to the first available public ip address
             if 'ipaddresses' in host and host['ipaddresses'] and isinstance(host['ipaddresses'], list):
                 host['ansible_ssh_host'] = host['ipaddresses'][0]
+                rfc1918 = re.compile(
+                    '^(10(\.(25[0-5]|2[0-4][0-9]|1[0-9]{1,2}|[0-9]{1,2})){3}|((172\.(1[6-9]|2[0-9]|3[01]))|192\.168)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{1,2}|[0-9]{1,2})){2})$')
+                for ipaddress in host['ipaddresses']:
+                    if not rfc1918.match(ipaddress):
+                        host['ansible_ssh_host'] = ipaddress
+                        break
 
             # Create additional groups
             for key in ('location', 'type', 'vendor'):
