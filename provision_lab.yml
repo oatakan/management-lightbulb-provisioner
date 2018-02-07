@@ -51,11 +51,12 @@
 - name: configure common options on windows domain controller
   hosts: tag_app_management_lightbulb:&tag_role_windows_domain_controller
   remote_user: Administrator
-  ansible_port: 5986
-  ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
-  ansible_connection: winrm
-  ansible_winrm_transport: basic
-  ansible_winrm_server_cert_validation: ignore
+  vars:
+    ansible_port: 5986
+    ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+    ansible_connection: winrm
+    ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
   gather_facts: true
   roles:
     - windows-ad-controller
@@ -63,11 +64,12 @@
 - name: configure common options on all windows nodes
   hosts: tag_app_management_lightbulb:&tag_role_windows_workstation
   remote_user: Administrator
-  ansible_port: 5986
-  ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
-  ansible_connection: winrm
-  ansible_winrm_transport: basic
-  ansible_winrm_server_cert_validation: ignore
+  vars:
+    ansible_port: 5986
+    ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+    ansible_connection: winrm
+    ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
   gather_facts: true
   roles:
     - windows-common
