@@ -53,7 +53,7 @@
   remote_user: Administrator
   vars:
     ansible_port: 5986
-    ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+    ansible_password: "{{ domain_admin_password }}"
     ansible_connection: winrm
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
@@ -66,7 +66,7 @@
   remote_user: Administrator
   vars:
     ansible_port: 5986
-    ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+    ansible_password: "{{ domain_admin_password }}"
     ansible_connection: winrm
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
@@ -80,7 +80,7 @@
   remote_user: Administrator
   vars:
     ansible_port: 5986
-    ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+    ansible_password: "{{ domain_admin_password }}"
     ansible_connection: winrm
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
