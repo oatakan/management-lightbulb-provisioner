@@ -51,6 +51,7 @@
 - name: configure common options on windows domain controller
   hosts: tag_app_management_lightbulb:&tag_role_windows_domain_controller
   remote_user: Administrator
+  become: no
   vars:
     ansible_port: 5986
     ansible_password: "{{ domain_admin_password }}"
@@ -64,6 +65,7 @@
 - name: configure common options on all windows workstation
   hosts: tag_app_management_lightbulb:&tag_role_windows_workstation
   remote_user: Administrator
+  become: no
   vars:
     ansible_port: 5986
     ansible_password: "{{ domain_admin_password }}"
@@ -78,6 +80,7 @@
 - name: configure common options on all windows nodes
   hosts: tag_app_management_lightbulb:&tag_role_windows_node
   remote_user: Administrator
+  become: no
   vars:
     ansible_port: 5986
     ansible_password: "{{ domain_admin_password }}"
