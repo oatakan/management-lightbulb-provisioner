@@ -11,17 +11,24 @@ template_nodes:
         volume_type: gp2
         volume_size: 10
         delete_on_termination: true
-  - name: "{{ item.username }}-win-node1"
-    role: windows-workstation
+  - name: "{{ item.username }}-win-workstation"
+    role: windows_workstation
     app_name: management_lightbulb
     pod_name: "{{ item.username }}"
     instance_type: t2.medium
     image: "{{ win2016_ami_id|default('ami-603b1c1a') }}" #windows 2016 base
     user_data: "{{ lookup('template', 'templates/windows.userdata.txt.j2') }}"
-  - name: "{{ item.username }}-win-node2"
-    role: windows-workstation
+  - name: "{{ item.username }}-win-node1"
+    role: windows_node
     app_name: management_lightbulb
     pod_name: "{{ item.username }}"
-    instance_type: t2.medium
+    instance_type: t2.small
+    image: "{{ win2016_ami_id|default('ami-603b1c1a') }}" #windows 2016 base
+    user_data: "{{ lookup('template', 'templates/windows.userdata.txt.j2') }}"
+  - name: "{{ item.username }}-win-node2"
+    role: windows_node
+    app_name: management_lightbulb
+    pod_name: "{{ item.username }}"
+    instance_type: t2.small
     image: "{{ win2016_ami_id|default('ami-603b1c1a') }}" #windows 2016 base
     user_data: "{{ lookup('template', 'templates/windows.userdata.txt.j2') }}"

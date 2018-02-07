@@ -15,7 +15,7 @@ hosting_nodes:
     role: gitlab
     app_name: management_lightbulb
     pod_name: "main"
-    instance_type: t2.micro
+    instance_type: t2.medium
     image: "{{ rhel7_ami_id|default('ami-85241def') }}" #rhel7
     volumes:
       - device_name: /dev/sda1
