@@ -46,21 +46,22 @@
   win_reboot:
   when: windnsfeature.reboot_required
 
-#- name: Sleep 180 seconds to wait for DNS config
-#  pause:
-#    minutes: 3
-#  when: windnsfeature.changed
+- name: Sleep 180 seconds to wait for DNS config
+  pause:
+    minutes: 3
+  when: windnsfeature.changed
  
-#- name: Ensure AD services are started - will fail if install not complete
-#  win_service:
-#    name: "{{ item }}"
-#    state: started
-#    start_mode: auto
-#  with_items:
-#    - adws
-#    - dns
-#    - kdc
-#    - netlogon
+- name: Ensure AD services are started - will fail if install not complete
+  win_service:
+    name: "{{ item }}"
+    state: started
+    start_mode: auto
+  with_items:
+    - adws
+    - dns
+    - kdc
+    - netlogon
+  ignore_errors: yes
  
 # Validate? 
 # DCDIAG 
