@@ -128,3 +128,17 @@
   delegate_facts: yes
   tags:
     - addhost
+
+- name: Set additional facts on windows instances
+  set_fact:
+    ansible_port: 5986
+    ansible_password: "{{ domain_admin_password }}"
+    ansible_connection: winrm
+    ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('windows' in item.invocation.module_args.instance_tags.role)
+  delegate_to: "{{ item.tagged_instances[0].public_ip }}"
+  delegate_facts: yes
+  tags:
+    - addhost
