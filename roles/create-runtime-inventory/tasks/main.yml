@@ -23,6 +23,17 @@
   tags:
     - provision
 
+- name: add windows workstation hosts to groups
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_windows_workstation,tag_role_windows,tag_app_management_lightbulb
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('windows_workstation' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - addhost
+
 - name: add cfme hosts to groups
   add_host:
     name: "{{ item.tagged_instances[0].public_ip }}"
@@ -67,6 +78,30 @@
   tags:
     - provision
     - hosting
+
+- name: add hosts to gitlab group
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_gitlab,tag_app_management_lightbulb
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('gitlab' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - provision
+    - gitlab
+
+- name: add hosts to windows_domain_controller group
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_windows_domain_controller,tag_role_windows,tag_app_management_lightbulb
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('windows_domain_controller' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - provision
+    - windows_domain_controller
 
 - name: Set facts on instances
   set_fact:

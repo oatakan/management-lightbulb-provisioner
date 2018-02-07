@@ -38,8 +38,8 @@
     - create-runtime-inventory
     - generate-content
 
-- name: configure common options on all nodes
-  hosts: tag_app_management_lightbulb:!tag_role_hosting
+- name: configure common options on all linux nodes
+  hosts: tag_app_management_lightbulb:!tag_role_hosting:!tag_role_windows
   become: yes
   remote_user: ec2-user
   become_method: sudo
@@ -47,6 +47,50 @@
   roles:
     - user_accounts
     - common
+
+- name: configure common options on windows domain controller
+  hosts: tag_app_management_lightbulb:&tag_role_windows_domain_controller
+  remote_user: Administrator
+  ansible_port: 5986
+  ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+  ansible_connection: winrm
+  ansible_winrm_transport: basic
+  ansible_winrm_server_cert_validation: ignore
+  gather_facts: true
+  roles:
+    - windows-ad-controller
+
+- name: configure common options on all windows nodes
+  hosts: tag_app_management_lightbulb:&tag_role_windows_workstation
+  remote_user: Administrator
+  ansible_port: 5986
+  ansible_password: "{{ ansible_password | default(domain_admin_password) }}"
+  ansible_connection: winrm
+  ansible_winrm_transport: basic
+  ansible_winrm_server_cert_validation: ignore
+  gather_facts: true
+  roles:
+    - windows-common
+    - windows-workstation
+
+- name: configure gitlab host
+  hosts: tag_app_management_lightbulb:&tag_role_gitlab
+  become: yes
+  remote_user: ec2-user
+  become_method: sudo
+  gather_facts: true
+  roles:
+    - geerlingguy.gitlab
+
+# run post-config separate to avoid handler restart issue
+- name: configure gitlab host
+  hosts: tag_app_management_lightbulb:&tag_role_gitlab
+  become: yes
+  remote_user: ec2-user
+  become_method: sudo
+  gather_facts: true
+  roles:
+    - gitlab-postconfig
 
 - name: configure control node
   hosts: control_nodes

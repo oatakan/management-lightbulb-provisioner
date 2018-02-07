@@ -4,3 +4,5 @@
 - src: geerlingguy.repo-epel
 
 - src: geerlingguy.nodejs
+
+- src: geerlingguy.gitlab

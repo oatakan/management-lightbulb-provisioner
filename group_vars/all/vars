@@ -9,6 +9,10 @@ root_password: "{{ vault_root_password }}"
 tower_lic: "{{ vault_tower_lic }}"
 ec2_private_key: "{{ vault_ec2_private_key }}"
 
+# Needed for AD and windows client provision
+dns_domain_name: "rhdemo.io"
+domain_admin_password: "{{ vault_domain_admin_password }}"
+
 student_ec2_key_name: "{{ vault_student_ec2_key_name }}"
 student_ec2_name_prefix: "{{ ec2_name_prefix }}"
 student_ec2_region: "{{ vault_student_ec2_region }}"
@@ -21,6 +25,7 @@ student_count_end: 1
 workshop_names:
   - w1-ansible-tower-lb
   - w2-tower-cf-lb
+  - w3-ansible-tower-win-lb
 
 workshop_name: w1-ansible-tower-lb
 
@@ -30,3 +35,42 @@ workshop_ascii_doc_file_name: doc/ansible-workshop-lab-guide.adoc
 image_names:
   rhel-74: RHEL-7.4_HVM_GA-20170808-x86_64-2-Hourly2-GP2
   cfme-58: import-ami-fg7ju3vd
+  win-2016: Windows_Server-2016-English-Full-Base-2018.01.12
+
+# Needed for reverse lookup DNS setup
+ptr_zone_name: "10.10.in-addr.arpa"
+ptr_zone_cidr: "10.10.0.0/16"
+
+# Gitlab variables
+gitlab_external_url: "https://gitlab.{{ dns_domain_name }}/"
+gitlab_git_data_dir: "/var/opt/gitlab/git-data"
+gitlab_backup_path: "/var/opt/gitlab/backups"
+gitlab_edition: "gitlab-ce"
+
+# SSL Config
+gitlab_redirect_http_to_https: "true"
+gitlab_ssl_certificate: "/etc/gitlab/ssl/gitlab.crt"
+gitlab_ssl_certificate_key: "/etc/gitlab/ssl/gitlab.key"
+
+# SSL Self-signed Certificate Configuration.
+gitlab_create_self_signed_cert: "true"
+gitlab_self_signed_cert_subj: "/C=US/ST=North Carolina/L=Raleigh/O=Ansible/CN=gitlab"
+
+# LDAP Configuration.
+gitlab_ldap_enabled: "true"
+gitlab_ldap_host: "windc.{{ dns_domain_name }}"
+gitlab_ldap_port: "389"
+gitlab_ldap_uid: "sAMAccountName"
+gitlab_ldap_method: "plain"
+gitlab_ldap_bind_dn: "CN=Admin,CN=Users,DC=rhdemo,DC=io"
+gitlab_ldap_password: "{{ domain_admin_password }}"
+gitlab_ldap_base: "DC=rhdemo,DC=io"
+
+# General Config
+gitlab_time_zone: "UTC"
+gitlab_backup_keep_time: "604800"
+gitlab_download_validate_certs: yes
+
+# Email configuration.
+gitlab_email_enabled: "false"
+gitlab_smtp_enable: "false"
