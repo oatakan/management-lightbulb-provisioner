@@ -131,6 +131,7 @@
 
 - name: Set additional facts on windows instances
   set_fact:
+    ansible_user: Administrator
     ansible_port: 5986
     ansible_password: "{{ domain_admin_password }}"
     ansible_connection: winrm
