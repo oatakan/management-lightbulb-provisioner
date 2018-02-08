@@ -48,16 +48,29 @@
     - debug:
         var: linux_nodes
 
-    - pause:
-
-
-- name: provision ec2 instances
+- name: provision linux ec2 instances
   hosts: localhost
   become: no
   roles:
     - role: ansible-role-ec2
+      nodes: linux_nodes
 
-- name: add hosts to groups
+- name: add linux hosts to groups
+  hosts: localhost
+  become: no
+  roles:
+    - create-runtime-inventory
+
+- name: provision windows ec2 instances
+  hosts: localhost
+  become: no
+  vars:
+    ansible_port: 5986
+  roles:
+    - role: ansible-role-ec2
+      nodes: windows_nodes
+
+- name: add windows hosts to groups and generate content
   hosts: localhost
   become: no
   roles:
