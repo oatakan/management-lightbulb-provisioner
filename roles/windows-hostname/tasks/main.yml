@@ -1,5 +1,21 @@
 ---
 - name: change hostname
   win_shell: Rename-Computer -NewName {{ hostname }}
-  notify: windows reboot
+
+- name: windows reboot
+  win_reboot:
+  register: windows_reboot
+  async: 7200
+  poll: 0
+
+- name: wait for reboot to complete
+  async_status: jid="{{ windows_reboot.ansible_job_id }}"
+  register: windows_reboot_result
+  until: windows_reboot_result.finished
+  retries: 10
+
+- name: waiting for servers instance come online
+  wait_for_connection:
+  when: windows_reboot_result | changed
+  ignore_errors: yes
 
