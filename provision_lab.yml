@@ -30,7 +30,7 @@
 
     - name: generate windows only nodes list
       set_fact:
-        windows_nodes: "{{ windows_nodes|default([]) + [ item ] }}"
+        windows_nodes: "{{ windows_nodes|default([]) }} + {{ item }}"
       with_items:
         - "{{ nodes }}"
       when: item.os_type is defined and item.os_type == 'windows'
@@ -40,7 +40,7 @@
 
     - name: generate linux only nodes list
       set_fact:
-        linux_nodes: "{{ linux_nodes|default([]) + [ item ] }}"
+        linux_nodes: "{{ linux_nodes|default([]) }} + {{ item }}"
       with_items:
         - "{{ nodes }}"
       when: item.os_type is not defined or item.os_type == 'linux'
