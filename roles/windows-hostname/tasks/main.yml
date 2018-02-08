@@ -1,6 +1,10 @@
 ---
+- debug:
+    msg: "{{ hostvars[inventory_hostname] }}"
+
 - name: change hostname
   win_shell: Rename-Computer -NewName {{ hostname }}
+  ignore_errors: yes
 
 - name: windows reboot
   win_reboot:
