@@ -1,0 +1,5 @@
+---
+- name: change hostname
+  win_shell: Rename-Computer -NewName {{ hostname }}
+  notify: windows reboot
+

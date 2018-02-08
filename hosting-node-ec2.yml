@@ -28,4 +28,5 @@ hosting_nodes:
     pod_name: "main"
     instance_type: t2.medium
     image: "{{ win2016_ami_id|default('ami-603b1c1a') }}" #windows 2016 base
+    os_type: windows
     user_data: "{{ lookup('template', 'templates/windows.userdata.txt.j2') }}"
