@@ -59,12 +59,8 @@
     force_dependent_services: yes
   with_items:
     - adws
-    - Afd
-    - RpcSs
-    - NTDS
     - dns
     - kdc
-    - LanmanWorkstation
     - netlogon
   ignore_errors: yes
  
