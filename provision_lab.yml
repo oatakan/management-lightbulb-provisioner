@@ -30,7 +30,7 @@
 
     - name: generate windows only nodes list
       set_fact:
-        windows_nodes: "{{ windows_nodes|default([]) }} + {{ item }}"
+        windows_nodes: "{{ windows_nodes|default([]) + [ item ] }}"
       with_items:
         - "{{ nodes }}"
       when: item.os_type is defined and item.os_type == 'windows'
@@ -40,7 +40,7 @@
 
     - name: generate linux only nodes list
       set_fact:
-        linux_nodes: "{{ linux_nodes|default([]) }} + {{ item }}"
+        linux_nodes: "{{ linux_nodes|default([]) + [ item ] }}"
       with_items:
         - "{{ nodes }}"
       when: item.os_type is not defined or item.os_type == 'linux'
@@ -53,7 +53,7 @@
   become: no
   roles:
     - role: ansible-role-ec2
-      nodes: linux_nodes
+      nodes: "{{ linux_nodes }}"
 
 - name: add linux hosts to groups
   hosts: localhost
@@ -68,7 +68,7 @@
     ansible_port: 5986
   roles:
     - role: ansible-role-ec2
-      nodes: windows_nodes
+      nodes: "{{ windows_nodes }}"
 
 - name: add windows hosts to groups and generate content
   hosts: localhost
