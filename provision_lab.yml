@@ -17,13 +17,23 @@
 
     - name: initialize nodes variable
       set_fact:
-        nodes: "{{ hosting_nodes }}"
+        nodes: "{{ nodes|default([]) + [item] }}"
+      with_items: "{{ hosting_nodes }}"
+
+    - debug:
+        var: nodes
 
     - name: generate nodes list
       set_fact:
-        nodes: "{{ nodes }} + {{ template_nodes }}"
-      with_items:
+        nodes: "{{ nodes }} + {{ [item[0]] }}"
+      with_nested:
+        - "{{ template_nodes }}"
         - "{{ users }}"
+
+    - debug:
+      var: nodes
+
+    pause:
 
 - name: provision ec2 instances
   hosts: localhost
