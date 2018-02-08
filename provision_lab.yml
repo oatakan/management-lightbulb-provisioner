@@ -33,7 +33,7 @@
     - debug:
       var: nodes
 
-    pause:
+    - pause:
 
 - name: provision ec2 instances
   hosts: localhost
