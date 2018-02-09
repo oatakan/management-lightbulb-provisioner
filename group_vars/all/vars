@@ -74,3 +74,6 @@ gitlab_download_validate_certs: yes
 # Email configuration.
 gitlab_email_enabled: "false"
 gitlab_smtp_enable: "false"
+
+ansible_winrm_operation_timeout_sec: 120
+ansible_winrm_read_timeout_sec: 150
