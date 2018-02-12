@@ -189,7 +189,7 @@
 - debug: var=arecords
 
 - name: Create A record for gitlab
-  win_shell: Add-DnsServerResourceRecordA -Name "gitlab" -ZoneName "{{ dns_domain_name }}" -AllowUpdateAny -Ipv4Address "{{ hostvars['gitlab']['private_ip'] }}" -TimeToLive 01:00:00 -AgeRecord
+  win_shell: Add-DnsServerResourceRecordA -Name "gitlab" -ZoneName "{{ dns_domain_name }}" -AllowUpdateAny -Ipv4Address "{{ hostvars['gitlab']['ec2_private_ip_address'] }}" -TimeToLive 01:00:00 -AgeRecord
   when: "'gitlab' not in arecords.stdout"
 
 - name: Get PTR Records for zone 
@@ -203,7 +203,7 @@
 
 # Add-DnsServerResourceRecordPtr -Name "17" -ZoneName "1.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "hostname.example.com"
 - name: Set PTR Record for each host 
-  win_shell: Add-DnsServerResourceRecordPtr -Name "{{ hostvars[item]['private_ip'].split('.')[3] }}" -ZoneName "{{ ptr_zone_name }}" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "{{ item + '.' + dns_domain_name}}"
+  win_shell: Add-DnsServerResourceRecordPtr -Name "{{ hostvars[item]['ec2_private_ip_address'].split('.')[3] }}" -ZoneName "{{ ptr_zone_name }}" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "{{ item + '.' + dns_domain_name}}"
   when: "item not in ptr_records.stdout"
   with_items: "{{groups.all}}"
 
