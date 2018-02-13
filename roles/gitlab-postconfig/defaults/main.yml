@@ -6,11 +6,11 @@ dns_domain_name: "example.com"
 
 # Users and Password to Create
 users_password: "MySecureP@ssword1"        # MUST FOLLOW WINDOWS AD PASSWORD RULES
-users:
-  - name: user1
-    username: user1
-    email: user1
-  - name: user2
-    username: user2
-    email: user2
+#users:
+#  - name: user1
+#    username: user1
+#    email: user1
+#  - name: user2
+#    username: user2
+#    email: user2
 
