@@ -189,8 +189,9 @@
 - debug: var=arecords
 
 - name: Create A record for gitlab
-  win_shell: Add-DnsServerResourceRecordA -Name "gitlab" -ZoneName "{{ dns_domain_name }}" -AllowUpdateAny -Ipv4Address "{{ hostvars['gitlab']['ec2_private_ip_address'] }}" -TimeToLive 01:00:00 -AgeRecord
-  when: "'gitlab' not in arecords.stdout"
+  win_shell: Add-DnsServerResourceRecordA -Name "gitlab" -ZoneName "{{ dns_domain_name }}" -AllowUpdateAny -Ipv4Address "{{ hostvars[item]['ec2_private_ip_address'] }}" -TimeToLive 01:00:00 -AgeRecord
+  with_items: "{{ groups['tag_role_gitlab'] }}"
+  when: "'gitlab' not in arecords.stdout" and groups.tag_role_gitlab is defined
 
 - name: Get PTR Records for zone 
   win_shell: Get-DnsServerResourceRecord -ZoneName {{ ptr_zone_name }} -RRType PTR | Format-Table -AutoSize -Wrap

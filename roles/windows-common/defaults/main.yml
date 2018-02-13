@@ -4,6 +4,6 @@ dns_domain_name: "example.com"
 domain_admin_password: "Micr0soft!"
 # Grab the private IP of your windows DNS for your lab dns server
 dns_servers:
-  - "{{ hostvars['windc'].ec2_private_ip_address }}"
+  - "{{ hostvars[groups['tag_role_windows_domain_controller'][0]].ec2_private_ip_address|default('8.8.4.4') }}"
   - 8.8.8.8
 
