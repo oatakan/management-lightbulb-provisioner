@@ -206,7 +206,7 @@
 - name: Set PTR Record for each host 
   win_shell: Add-DnsServerResourceRecordPtr -Name "{{ hostvars[item]['ec2_private_ip_address'].split('.')[3] }}" -ZoneName "{{ ptr_zone_name }}" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "{{ item + '.' + dns_domain_name}}"
   when: "item not in ptr_records.stdout"
-  with_items: "{{groups.all}}"
+  with_items: "{{groups.lab_hosts}}"
 
 - name: Add windows group
   win_domain_group: 
