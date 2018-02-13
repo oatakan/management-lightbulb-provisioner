@@ -96,11 +96,11 @@
 #  changed_when: "user_prefix + item + 'already exists' not in gitlab_users.stdout"
 
 - debug:
-    msg: "gitlab hostname is {{ ansible_hostname | lower }}"
+    msg: "gitlab hostname is {{ hostname | lower }}"
 
 - name: GitLab Post | Create local users
   gitlab_user:
-    server_url: https://{{ ansible_hostname | lower }}.{{ dns_domain_name }}
+    server_url: https://{{ hostname | lower }}.{{ dns_domain_name }}
     validate_certs: False
     login_user: root
     login_password: "{{ domain_admin_password }}"
@@ -113,7 +113,7 @@
   with_items: "{{ users }}"
 
 - name: GitLab Post | Create Projects in GitLab
-  command: ./create_project.py -s "https://{{ ansible_hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
+  command: ./create_project.py -s "https://{{ hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
   args: 
     chdir: /root
   with_items: "{{ users }}"
