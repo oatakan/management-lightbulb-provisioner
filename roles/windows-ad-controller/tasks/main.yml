@@ -176,10 +176,10 @@
 - name: Set Reverse Lookup Zone - 2nd run
   win_shell: Add-DnsServerPrimaryZone -NetworkId "{{ ptr_zone_cidr }}" -DynamicUpdate Secure -ReplicationScope Domain
   when: "ptr_zone_name not in dnsserverzone.stdout"
-  register: revsersedns2
+  register: reversedns2
   ignore_errors: true
 
-- debug: var=revsersedns2
+- debug: var=reversedns2
 
 - name: Get A records for zone 
   win_shell: Get-DnsServerResourceRecord -ZoneName {{ dns_domain_name }} -RRType A | Format-Table -AutoSize -Wrap

@@ -96,7 +96,7 @@
 #  changed_when: "user_prefix + item + 'already exists' not in gitlab_users.stdout"
 
 - debug:
-    msg: "gitlab hostname is {{ hostname | lower }}"
+    msg: "gitlab hostname is {{ inventory_hostname }}"
 
 - name: GitLab Post | Create local users via API
   uri:
