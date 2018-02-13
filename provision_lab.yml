@@ -115,12 +115,12 @@
   gather_facts: true
   pre_tasks:
     - debug:
-        msg: "users list for windows ad controller role: {{ users }}"
+        msg: "users list for windows ad controller role: {{ hostvars.localhost.users }}"
   roles:
     - role: windows-ad-controller
-      users: "{{ users }}"
+      users: "{{ hostvars.localhost.users }}"
 
-- name: configure common options on all windows workstation
+- name: configure common options on all windows workstations
   hosts: tag_app_management_lightbulb:&tag_role_windows_workstation
   remote_user: Administrator
   become: no
@@ -166,7 +166,8 @@
   become_method: sudo
   gather_facts: true
   roles:
-    - gitlab-postconfig
+    - role: gitlab-postconfig
+      users: "{{ hostvars.localhost.users }}"
 
 - name: configure control node
   hosts: control_nodes
