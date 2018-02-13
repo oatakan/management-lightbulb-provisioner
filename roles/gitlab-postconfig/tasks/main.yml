@@ -13,8 +13,8 @@
     name: pyapi-gitlab
 
 - name: GitLab Post | Repos to create
-  debug: msg="https://gitlab.{{ dns_domain_name }}/{{user_prefix}}{{item}}/ansible-playbooks"
-  with_sequence: count="{{ user_count }}"
+  debug: msg="https://{{ ansible_hostname | lower }}.{{ dns_domain_name }}/{{ item.username }}/ansible-playbooks"
+  with_items: "{{ users }}"
 
 # This module did nothing...  but finished OK.  Why? 
 #- name: GitLab Post | Create Gitlab Project in group Ansible
@@ -95,27 +95,30 @@
 #  register: gitlab_users
 #  changed_when: "user_prefix + item + 'already exists' not in gitlab_users.stdout"
 
+- debug:
+    msg: "gitlab hostname is {{ ansible_hostname | lower }}"
+
 - name: GitLab Post | Create local users
   gitlab_user:
-    server_url: https://gitlab.{{ dns_domain_name }}
+    server_url: https://{{ ansible_hostname | lower }}.{{ dns_domain_name }}
     validate_certs: False
     login_user: root
     login_password: "{{ domain_admin_password }}"
-    name: "{{ user_prefix }}{{ item }}"
-    username: "{{ user_prefix }}{{ item }}"
-    password: "AnsibleWS2017#"
-    email: "{{ user_prefix }}{{ item }}@{{ dns_domain_name }}"
+    name: "{{ item.name }}"
+    username: "{{ item.username }}"
+    password: "{{ users_password }}"
+    email: "{{ item.username }}@{{ dns_domain_name }}"
     confirm: False
     state: present
-  with_sequence: count="{{ user_count }}"
+  with_items: "{{ users }}"
 
 - name: GitLab Post | Create Projects in GitLab
-  command: ./create_project.py -s https://gitlab.{{ dns_domain_name }} -u {{user_prefix}}{{item}} -p {{ users_password }} -r {{user_prefix}}{{item}}-playbooks
+  command: ./create_project.py -s "https://{{ ansible_hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
   args: 
     chdir: /root
-  with_sequence: count="{{ user_count }}"
+  with_items: "{{ users }}"
   register: gitlab_repos
-  changed_when: "user_prefix + item + '-playbooks already Exists' not in gitlab_repos.stdout"
+  changed_when: "item.username + '-playbooks already Exists' not in gitlab_repos.stdout"
 
 
 
