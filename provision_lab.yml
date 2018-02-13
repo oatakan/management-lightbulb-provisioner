@@ -68,6 +68,7 @@
     ansible_port: 5986
   roles:
     - role: ansible-role-ec2
+      instance_wait_connection_timeout: 600
       nodes: "{{ windows_nodes }}"
 
 - name: add windows hosts to groups and generate content
