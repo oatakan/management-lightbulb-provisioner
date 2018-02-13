@@ -58,7 +58,7 @@ gitlab_self_signed_cert_subj: "/C=US/ST=North Carolina/L=Raleigh/O=Ansible/CN=gi
 
 # LDAP Configuration.
 gitlab_ldap_enabled: "true"
-gitlab_ldap_host: "{{ hostvars[groups.tag_role_windows_domain_controller.0]['ansible_hostname'] | default('windc') }}.{{ dns_domain_name }}"
+gitlab_ldap_host: "{{ hostvars[groups.tag_role_windows_domain_controller.0]['hostname'] | default('windc') }}.{{ dns_domain_name }}"
 gitlab_ldap_port: "389"
 gitlab_ldap_uid: "sAMAccountName"
 gitlab_ldap_method: "plain"
