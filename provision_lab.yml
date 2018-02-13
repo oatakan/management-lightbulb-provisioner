@@ -113,8 +113,12 @@
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
   gather_facts: true
+  pre_tasks:
+    - debug:
+        msg: "users list for windows ad controller role: {{ users }}"
   roles:
-    - windows-ad-controller
+    - role: windows-ad-controller
+      users: "{{ users }}"
 
 - name: configure common options on all windows workstation
   hosts: tag_app_management_lightbulb:&tag_role_windows_workstation
