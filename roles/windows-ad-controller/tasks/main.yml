@@ -232,6 +232,8 @@
     email: "Admin@{{ dns_domain_name }}"
     #path: ou=Users,dc=ansibleworkshop,dc=com
 
+- debug:
+    var: users
 
 - name: Add windows AD users 
   win_domain_user:

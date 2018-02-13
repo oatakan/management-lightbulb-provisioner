@@ -6,8 +6,12 @@ domain_admin_password: "Micr0soft!"
 # Users and Password to Create
 users_password: "MySecureP@ssword1"        # MUST FOLLOW WINDOWS AD PASSWORD RULES
 users:
-  - user1
-  - user2
+  - name: user1
+    username: user1
+    email: user1
+  - name: user2
+    username: user2
+    email: user2
 
 # Details for reverse DNS lookup
 ptr_zone_name: "0.168.192.in-addr.arpa"
