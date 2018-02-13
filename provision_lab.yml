@@ -156,6 +156,7 @@
   become_method: sudo
   gather_facts: true
   roles:
+    - linux-dns
     - geerlingguy.gitlab
 
 # run post-config separate to avoid handler restart issue

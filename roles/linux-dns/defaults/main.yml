@@ -1,0 +1,7 @@
+---
+# defaults file for linux-common
+dns_domain_name: "example.com"
+# Grab the private IP of your windows DNS for your lab dns server
+dns_server: "{{ hostvars[groups.tag_role_windows_domain_controller.0]['ec2_private_ip_address'] | default('windc') }}"
+
+

@@ -13,7 +13,7 @@
     name: pyapi-gitlab
 
 - name: GitLab Post | Repos to create
-  debug: msg="https://{{ ansible_hostname | lower }}.{{ dns_domain_name }}/{{ item.username }}/ansible-playbooks"
+  debug: msg="https://{{ hostname | lower }}.{{ dns_domain_name }}/{{ item.username }}/ansible-playbooks"
   with_items: "{{ users }}"
 
 # This module did nothing...  but finished OK.  Why? 
