@@ -50,11 +50,11 @@
       {
         "name": "ansible-playbooks",
         "visibility": "public",
-        "issues_enabled": True,
-        "wiki_enabled": False,
-        "snippets_enabled": False,
-        "issues_enabled": False,
-        "merge_requests_enabled": True
+        "issues_enabled": "True",
+        "wiki_enabled": "False",
+        "snippets_enabled": "False",
+        "issues_enabled": "False",
+        "merge_requests_enabled": "True"
       }
   with_items: "{{ users }}"
   delegate_to: localhost
