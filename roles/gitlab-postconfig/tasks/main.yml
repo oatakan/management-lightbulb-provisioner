@@ -37,7 +37,7 @@
 # This module did nothing...  but finished OK.  Why?
 - name: GitLab Post | Create Gitlab Project in group Ansible
   gitlab_project:
-    server_url: "https://{{ inventory_hostname }}"
+    server_url: https://{{ hostname | lower }}.{{ dns_domain_name }}
     validate_certs: False
     login_user: "{{ item.username }}"
     login_password: "{{ users_password }}"
