@@ -102,7 +102,7 @@
   uri:
     url: https://{{ inventory_hostname }}/api/v4/users
     method: POST
-    user: root
+    user: Administrator
     password: "{{ domain_admin_password }}"
     force_basic_auth: yes
     validate_certs: no
