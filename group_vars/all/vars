@@ -46,6 +46,7 @@ gitlab_external_url: "https://{{ hostname | lower }}.{{ dns_domain_name }}/"
 gitlab_git_data_dir: "/var/opt/gitlab/git-data"
 gitlab_backup_path: "/var/opt/gitlab/backups"
 gitlab_edition: "gitlab-ce"
+gitlab_version: "10.0.6-ce.0.el7"
 
 # SSL Config
 gitlab_redirect_http_to_https: "true"
