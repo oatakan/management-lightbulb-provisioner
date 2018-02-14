@@ -16,6 +16,24 @@
   debug: msg="https://{{ hostname | lower }}.{{ dns_domain_name }}/{{ item.username }}/ansible-playbooks"
   with_items: "{{ users }}"
 
+- name: GitLab Post | Login with LDAP creds for each user
+  uri:
+    url: https://{{ inventory_hostname }}/api/v4/projects
+    method: GET
+    user: "{{ item.username }}"
+    password: "{{ users_password }}"
+    force_basic_auth: yes
+    validate_certs: no
+  with_items: "{{ users }}"
+  delegate_to: localhost
+  become: no
+  register: projects_list
+
+- debug:
+    msg: "list of projects {{ item }}"
+  with_items: "{{ projects_list.results }}"
+  when: projects_list | success
+
 # This module did nothing...  but finished OK.  Why? 
 #- name: GitLab Post | Create Gitlab Project in group Ansible
 #  gitlab_project:
