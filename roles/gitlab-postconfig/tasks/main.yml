@@ -34,21 +34,21 @@
   with_items: "{{ projects_list.results }}"
   when: projects_list | success
 
-# This module did nothing...  but finished OK.  Why? 
-#- name: GitLab Post | Create Gitlab Project in group Ansible
-#  gitlab_project:
-#    server_url: "https://gitlab.{{ dns_domain_name }}"
-#    validate_certs: False
-#    login_user: "{{user_prefix}}{{item}}"
-#    login_password: "{{ users_password }}"
-#    visibility_level: 10
-#    name: ansible-playbooks
-#    issues_enabled: True
-#    wiki_enabled: False
-#    snippets_enabled: False
-#    merge_requests_enabled: True
-#    state: present
-#  with_sequence: count="{{ user_count }}"
+# This module did nothing...  but finished OK.  Why?
+- name: GitLab Post | Create Gitlab Project in group Ansible
+  gitlab_project:
+    server_url: "https://{{ inventory_hostname }}"
+    validate_certs: False
+    login_user: "{{ item.username }}"
+    login_password: "{{ users_password }}"
+    visibility_level: 10
+    name: ansible-playbooks
+    issues_enabled: True
+    wiki_enabled: False
+    snippets_enabled: False
+    merge_requests_enabled: True
+    state: present
+  with_items: "{{ users }}"
 
 - name: GitLab Post | Copy python create project script
   copy:
