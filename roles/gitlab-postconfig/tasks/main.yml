@@ -38,7 +38,7 @@
   uri:
     url: "https://{{ inventory_hostname }}/api/v4/projects/user/{{ item.username }}"
     method: POST
-    user: Administrator
+    user: root
     password: "{{ domain_admin_password }}"
     force_basic_auth: yes
     validate_certs: no
