@@ -34,37 +34,37 @@
   with_items: "{{ projects_list.results }}"
   when: projects_list | success
 
-- name: GitLab Post | Create projects via API
-  uri:
-    url: "https://{{ inventory_hostname }}/api/v4/projects"
-    method: POST
-    user: "{{ item.username }}"
-    password: "{{ users_password }}"
-    force_basic_auth: yes
-    validate_certs: no
-    status_code: 200
-    body_format: json
-    headers:
-      Content-Type: application/json
-    body: >
-      {
-        "name": "ansible-playbooks",
-        "visibility": "public",
-        "issues_enabled": "True",
-        "wiki_enabled": "False",
-        "snippets_enabled": "False",
-        "issues_enabled": "False",
-        "merge_requests_enabled": "True"
-      }
-  with_items: "{{ users }}"
-  delegate_to: localhost
-  become: no
-  register: projects_create
-
-- debug:
-    msg: "new projects results {{ item }}"
-  with_items: "{{ projects_create.results }}"
-  when: projects_create | success
+#- name: GitLab Post | Create projects via API
+#  uri:
+#    url: "https://{{ inventory_hostname }}/api/v4/projects"
+#    method: POST
+#    user: "{{ item.username }}"
+#    password: "{{ users_password }}"
+#    force_basic_auth: yes
+#    validate_certs: no
+#    status_code: 200
+#    body_format: json
+#    headers:
+#      Content-Type: application/json
+#    body: >
+#      {
+#        "name": "ansible-playbooks",
+#        "visibility": "public",
+#        "issues_enabled": "True",
+#        "wiki_enabled": "False",
+#        "snippets_enabled": "False",
+#        "issues_enabled": "False",
+#        "merge_requests_enabled": "True"
+#      }
+#  with_items: "{{ users }}"
+#  delegate_to: localhost
+#  become: no
+#  register: projects_create
+#
+#- debug:
+#    msg: "new projects results {{ item }}"
+#  with_items: "{{ projects_create.results }}"
+#  when: projects_create | success
 
 # This module did nothing...  but finished OK.  Why?
 #- name: GitLab Post | Create Gitlab Project in group Ansible
@@ -148,28 +148,28 @@
 - debug:
     msg: "gitlab hostname is {{ inventory_hostname }}"
 
-- name: GitLab Post | Create local users via API
-  uri:
-    url: https://{{ inventory_hostname }}/api/v4/users
-    method: POST
-    user: root
-    password: "{{ domain_admin_password }}"
-    force_basic_auth: yes
-    validate_certs: no
-    status_code: 200
-    body_format: json
-    headers:
-      Content-Type: application/json
-    body: >
-      {
-        "username": "{{ item.username }}",
-        "password": "{{ users_password }}",
-        "name": "{{ item.name }}",
-        "mail": "{{ item.email }}"
-      }
-  with_items: "{{ users }}"
-  delegate_to: localhost
-  become: no
+#- name: GitLab Post | Create local users via API
+#  uri:
+#    url: https://{{ inventory_hostname }}/api/v4/users
+#    method: POST
+#    user: root
+#    password: "{{ domain_admin_password }}"
+#    force_basic_auth: yes
+#    validate_certs: no
+#    status_code: 200
+#    body_format: json
+#    headers:
+#      Content-Type: application/json
+#    body: >
+#      {
+#        "username": "{{ item.username }}",
+#        "password": "{{ users_password }}",
+#        "name": "{{ item.name }}",
+#        "mail": "{{ item.email }}"
+#      }
+#  with_items: "{{ users }}"
+#  delegate_to: localhost
+#  become: no
 
 #- name: GitLab Post | Create local users
 #  gitlab_user:
