@@ -34,53 +34,53 @@
   with_items: "{{ projects_list.results }}"
   when: projects_list | success
 
-#- name: GitLab Post | Create projects via API
-#  uri:
-#    url: "https://{{ inventory_hostname }}/api/v4/projects"
-#    method: POST
-#    user: "{{ item.username }}"
-#    password: "{{ users_password }}"
-#    force_basic_auth: yes
-#    validate_certs: no
-#    status_code: 200
-#    body_format: json
-#    headers:
-#      Content-Type: application/json
-#    body: >
-#      {
-#        "name": "ansible-playbooks",
-#        "visibility": "public",
-#        "issues_enabled": "True",
-#        "wiki_enabled": "False",
-#        "snippets_enabled": "False",
-#        "issues_enabled": "False",
-#        "merge_requests_enabled": "True"
-#      }
-#  with_items: "{{ users }}"
-#  delegate_to: localhost
-#  become: no
-#  register: projects_create
-#
-#- debug:
-#    msg: "new projects results {{ item }}"
-#  with_items: "{{ projects_create.results }}"
-#  when: projects_create | success
+- name: GitLab Post | Create projects via API
+  uri:
+    url: "https://{{ inventory_hostname }}/api/v4/projects"
+    method: POST
+    user: "{{ item.username }}"
+    password: "{{ users_password }}"
+    force_basic_auth: yes
+    validate_certs: no
+    status_code: 200
+    body_format: json
+    headers:
+      Content-Type: application/json
+    body: >
+      {
+        "name": "ansible-playbooks",
+        "visibility": "public",
+        "issues_enabled": "True",
+        "wiki_enabled": "False",
+        "snippets_enabled": "False",
+        "issues_enabled": "False",
+        "merge_requests_enabled": "True"
+      }
+  with_items: "{{ users }}"
+  delegate_to: localhost
+  become: no
+  register: projects_create
+
+- debug:
+    msg: "new projects results {{ item }}"
+  with_items: "{{ projects_create.results }}"
+  when: projects_create | success
 
 # This module did nothing...  but finished OK.  Why?
-- name: GitLab Post | Create Gitlab Project in group Ansible
-  gitlab_project:
-    server_url: https://{{ hostname | lower }}.{{ dns_domain_name }}
-    validate_certs: False
-    login_user: "{{ item.username }}"
-    login_password: "{{ users_password }}"
-    visibility_level: 10
-    name: ansible-playbooks
-    issues_enabled: True
-    wiki_enabled: False
-    snippets_enabled: False
-    merge_requests_enabled: True
-    state: present
-  with_items: "{{ users }}"
+#- name: GitLab Post | Create Gitlab Project in group Ansible
+#  gitlab_project:
+#    server_url: https://{{ hostname | lower }}.{{ dns_domain_name }}
+#    validate_certs: False
+#    login_user: "{{ item.username }}"
+#    login_password: "{{ users_password }}"
+#    visibility_level: 10
+#    name: ansible-playbooks
+#    issues_enabled: True
+#    wiki_enabled: False
+#    snippets_enabled: False
+#    merge_requests_enabled: True
+#    state: present
+#  with_items: "{{ users }}"
 
 - name: GitLab Post | Copy python create project script
   copy:
@@ -171,30 +171,30 @@
 #  delegate_to: localhost
 #  become: no
 
-#- name: GitLab Post | Create local users
-#  gitlab_user:
-#    #server_url: https://{{ hostname | lower }}.{{ dns_domain_name }}
-#    server_url: https://{{ inventory_hostname }}
-#    validate_certs: False
-#    login_user: root
-#    login_password: "{{ domain_admin_password }}"
-#    name: "{{ item.name }}"
-#    username: "{{ item.username }}"
-#    password: "{{ users_password }}"
-#    email: "{{ item.username }}@{{ dns_domain_name }}"
-#    confirm: False
-#    state: present
-#  with_items: "{{ users }}"
-#  delegate_to: localhost
-#  become: no
-#
-#- name: GitLab Post | Create Projects in GitLab
-#  command: ./create_project.py -s "https://{{ hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
-#  args:
-#    chdir: /root
-#  with_items: "{{ users }}"
-#  register: gitlab_repos
-#  changed_when: "item.username + '-playbooks already Exists' not in gitlab_repos.stdout"
+- name: GitLab Post | Create local users
+  gitlab_user:
+    #server_url: https://{{ hostname | lower }}.{{ dns_domain_name }}
+    server_url: https://{{ inventory_hostname }}
+    validate_certs: False
+    login_user: root
+    login_password: "{{ domain_admin_password }}"
+    name: "{{ item.name }}"
+    username: "{{ item.username }}"
+    password: "{{ users_password }}"
+    email: "{{ item.username }}@{{ dns_domain_name }}"
+    confirm: False
+    state: present
+  with_items: "{{ users }}"z
+  delegate_to: localhost
+  become: no
+
+- name: GitLab Post | Create Projects in GitLab
+  command: ./create_project.py -s "https://{{ hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
+  args:
+    chdir: /root
+  with_items: "{{ users }}"
+  register: gitlab_repos
+  changed_when: "item.username + '-playbooks already Exists' not in gitlab_repos.stdout"
 
 
 
