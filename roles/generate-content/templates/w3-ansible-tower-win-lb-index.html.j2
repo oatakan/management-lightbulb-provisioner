@@ -86,24 +86,24 @@ ansible_port={{ ssh_port }}<br />
 [windows]<br />
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
 {% if 'windows_node' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-' + user.username + '-([\\w]*)$', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
 {% endif %}
 {% endfor %}
 <br />
 [windows_workstation]<br />
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
 {% if 'windows_workstation' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-' + user.username + '-([\\w]*)$', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
 {% endif %}
 {% endfor %}
 <br />
-[windows:vars]
+[windows:vars]<br />
 ansible_connection=winrm
 ansible_winrm_transport=basic
 ansible_winrm_server_cert_validation=ignore
 ansible_port=5986
 <br />
-[windows_workstation:vars]
+[windows_workstation:vars]<br />
 ansible_connection=winrm
 ansible_winrm_transport=basic
 ansible_winrm_server_cert_validation=ignore
@@ -111,8 +111,8 @@ ansible_port=5986
 <br />
 [control]<br />
 {% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'control' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-([\\w]*)', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{% if 'control' == vm.invocation.module_args.instance_tags.role %}
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-' + user.username + '-([\\w]*)$', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
 {% endif %}
 {% endfor %}</p>
     </div>

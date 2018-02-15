@@ -6,7 +6,7 @@
     ansible_user: ec2-user
     groups: lab_hosts,control_nodes,tag_app_management_lightbulb
   with_items: "{{ instances.results }}"
-  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('control' in item.invocation.module_args.instance_tags.role)
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('control' == item.invocation.module_args.instance_tags.role)
   changed_when: no
   tags:
     - provision
@@ -18,7 +18,7 @@
     ansible_user: ec2-user
     groups: lab_hosts,managed_nodes,tag_app_management_lightbulb
   with_items: "{{ instances.results }}"
-  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('control' not in item.invocation.module_args.instance_tags.role)
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('control' != item.invocation.module_args.instance_tags.role)
   changed_when: no
   tags:
     - provision
