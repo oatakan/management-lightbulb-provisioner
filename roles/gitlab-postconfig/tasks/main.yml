@@ -184,7 +184,7 @@
     email: "{{ item.username }}@{{ dns_domain_name }}"
     confirm: False
     state: present
-  with_items: "{{ users }}"z
+  with_items: "{{ users }}"
   delegate_to: localhost
   become: no
 
