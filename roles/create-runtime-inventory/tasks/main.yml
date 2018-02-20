@@ -34,6 +34,17 @@
   tags:
     - addhost
 
+- name: add web hosts to groups
+  add_host:
+    name: "{{ item.tagged_instances[0].public_ip }}"
+    ansible_host: "{{ item.tagged_instances[0].public_ip }}"
+    groups: tag_role_web,tag_app_management_lightbulb
+  with_items: "{{ instances.results }}"
+  when: ('management_lightbulb' in item.invocation.module_args.instance_tags.app) and ('web' in item.invocation.module_args.instance_tags.role)
+  changed_when: no
+  tags:
+    - addhost
+
 - name: add windows nodes hosts to groups
   add_host:
     name: "{{ item.tagged_instances[0].public_ip }}"

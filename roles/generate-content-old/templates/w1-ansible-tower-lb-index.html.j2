@@ -35,10 +35,9 @@ Try it Yourself »
 
 <div data-role="page" id="pageone">
   <div data-role="header">
-    <h1>Management Lightbulb Workshop - Ansible Tower and CloudForms</h1>
+    <h1>Ansible Lightbulb Workshop</h1>
   </div>
   <div data-role="main">
-    <img src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/Red_Hat_RGB.jpg"/>
     <img src="https://www.ansible.com/hubfs/2016_Images/Assets/Ansible-Tower-Logotype-Small-RGB-FullBlack.png"/>
     <h3>CONTACT: "{{ instructor_email }}"<br>
 
@@ -50,8 +49,8 @@ GITHUB for Ansible Lightbulb: <a href="https://github.com/ansible/lightbulb" tar
 <h3><b><font color="gray">URLs for lab materials: </font></b></h3>
 
 
-<h4><a href="http://ansible-workshop.redhatgov.io/decks/ansible-essentials.html#/" target="new_1">DECK: Ansible Essentials</a><br></h4>
-<h4><a href="http://ansible-workshop.redhatgov.io/decks/intro-to-ansible-tower.html" target="new_2">DECK:  Intro To Tower</a><br></h4>
+<h4><a href="http://htmlpreview.github.io/?https://github.com/ansible/lightbulb/blob/master/decks/ansible-essentials.html" target="new_1">DECK: Ansible Essentials</a><br></h4>
+<h4><a href="http://htmlpreview.github.io/?https://github.com/ansible/lightbulb/blob/master/decks/intro-to-ansible-tower.html" target="new_2">DECK:  Intro To Tower</a><br></h4>
 <h4><a href="workshop/index.html" target="new_main">LAB GUIDE</a><br><br></h4>
 
 <hr>
@@ -77,17 +76,6 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
   <div data-role="main" class="ui-content">
     <div data-role="collapsible">
       <h1>{{ user.username }} - Click to see details!</h1>
-      <h2>Use the links below</h2><br />
-      CloudForms URL (admin/{{ cfme_pass }}):
-{% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + user.username] %}
-<a href="http://{{ vm }}" target="cf_url_{{ user.username }}">http://{{ vm }}</a><br />
-{% endfor %}<br />
-      Ansible Tower URL (admin/{{ tower_pass }}):
-{% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + user.username] %}
-<a href="https://{{ vm }}" target="tower_url_{{ user.username }}">https://{{ vm }}</a><br />
-{% endfor %}
-<br />
-      <h2>Inventory</h2>
       <p>[all:vars]<br />
 ansible_user={{ user.username }}<br />
 ansible_ssh_pass={{ admin_password }}<br />
@@ -95,19 +83,18 @@ ansible_ssh_pass={{ admin_password }}<br />
 ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
-[cfme]<br />
-{% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
-{% endfor %}
-<br />
-[tower]<br />
-{% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
-{% endfor %}
-<br />
 [web]<br />
-{% for vm in groups.tag_role_web if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'web' in vm.invocation.module_args.instance_tags.role %}
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{% endif %}
+{% endfor %}
+<br />
+[control]<br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'control' in vm.invocation.module_args.instance_tags.role %}
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-([\\w]*)', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{% endif %}
 {% endfor %}</p>
     </div>
   </div>

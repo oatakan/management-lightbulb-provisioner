@@ -84,17 +84,13 @@ ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
 [windows]<br />
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'windows_node' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-' + user.username + '-([\\w]*)$', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
-{% endif %}
+{% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + user.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}
 <br />
 [windows_workstation]<br />
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'windows_workstation' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-' + user.username + '-([\\w]*)$', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
-{% endif %}
+{% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + user.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}
 <br />
 [windows:vars]<br />
@@ -110,10 +106,8 @@ ansible_winrm_server_cert_validation=ignore
 ansible_port=5986
 <br />
 [control]<br />
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'control' == vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-' + user.username + '-([\\w]*)$', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
-{% endif %}
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}</p>
     </div>
   </div>

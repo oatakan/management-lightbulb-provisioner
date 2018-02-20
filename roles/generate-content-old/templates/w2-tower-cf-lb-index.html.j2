@@ -79,12 +79,16 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
       <h1>{{ user.username }} - Click to see details!</h1>
       <h2>Use the links below</h2><br />
       CloudForms URL (admin/{{ cfme_pass }}):
-{% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + user.username] %}
-<a href="http://{{ vm }}" target="cf_url_{{ user.username }}">http://{{ vm }}</a><br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
+<a href="http://{{ vm.tagged_instances[0].public_ip }}" target="cf_url_{{ user.username }}">http://{{ vm.tagged_instances[0].public_ip }}</a><br />
+{% endif %}
 {% endfor %}<br />
       Ansible Tower URL (admin/{{ tower_pass }}):
-{% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + user.username] %}
-<a href="https://{{ vm }}" target="tower_url_{{ user.username }}">https://{{ vm }}</a><br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'tower' in vm.invocation.module_args.instance_tags.role %}
+<a href="https://{{ vm.tagged_instances[0].public_ip }}" target="tower_url_{{ user.username }}">https://{{ vm.tagged_instances[0].public_ip }}</a><br />
+{% endif %}
 {% endfor %}
 <br />
       <h2>Inventory</h2>
@@ -96,18 +100,24 @@ ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
 [cfme]<br />
-{% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{% endif %}
 {% endfor %}
 <br />
 [tower]<br />
-{% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'tower' in vm.invocation.module_args.instance_tags.role %}
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{% endif %}
 {% endfor %}
 <br />
 [web]<br />
-{% for vm in groups.tag_role_web if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
+{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
+{% if 'web' in vm.invocation.module_args.instance_tags.role %}
+{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
+{% endif %}
 {% endfor %}</p>
     </div>
   </div>

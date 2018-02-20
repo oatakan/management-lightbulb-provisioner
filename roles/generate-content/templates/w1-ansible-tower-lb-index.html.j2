@@ -84,17 +84,13 @@ ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
 [web]<br />
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'web' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
-{% endif %}
+{% for vm in groups.tag_role_web if vm in groups['tag_pod_' + user.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}
 <br />
 [control]<br />
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == user.username %}
-{% if 'control' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-([\\w]*)', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}<br />
-{% endif %}
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}</p>
     </div>
   </div>

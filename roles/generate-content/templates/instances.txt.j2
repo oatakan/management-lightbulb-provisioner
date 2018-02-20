@@ -6,29 +6,21 @@ ansible_port={{ ssh_port }}
 {% endif %}
 
 [cfme]
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == item.username %}
-{% if 'cfme' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-([\\w]*)', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}
-{% endif %}
+{% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + item.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
 
 [tower]
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == item.username %}
-{% if 'tower' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-([\\w]*)', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}
-{% endif %}
+{% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + item.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
 
 [web]
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == item.username %}
-{% if 'web' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-(node)(\\d)', '\\1-\\2') }} ansible_host={{ vm.tagged_instances[0].public_ip }}
-{% endif %}
+{% for vm in groups.tag_role_web if vm in groups['tag_pod_' + item.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
 
 [control]
-{% for vm in instances.results if vm.invocation.module_args.instance_tags.pod == item.username %}
-{% if 'control' in vm.invocation.module_args.instance_tags.role %}
-{{ vm.invocation.module_args.instance_tags.name | regex_replace('.*-([\\w]*)', '\\1') }} ansible_host={{ vm.tagged_instances[0].public_ip }}
-{% endif %}
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + item.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
