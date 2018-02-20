@@ -5,7 +5,7 @@ ansible_port={{ ssh_port }}
 
 {% for user in users %}
 [{{ user.username }}]
-{% for vm in groups['tag_pod_' + item.username] %}
+{% for vm in groups['tag_pod_' + user.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
 {% endfor %}
