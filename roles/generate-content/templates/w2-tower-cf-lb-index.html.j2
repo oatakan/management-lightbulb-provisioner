@@ -78,14 +78,18 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
     <div data-role="collapsible">
       <h1>{{ user.username }} - Click to see details!</h1>
       <h2>Use the links below</h2><br />
+{% if groups.tag_role_cfme is defined %}
       CloudForms URL (admin/{{ cfme_pass }}):
 {% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + user.username] %}
 <a href="http://{{ vm }}" target="cf_url_{{ user.username }}">http://{{ vm }}</a><br />
-{% endfor %}<br />
+{% endfor %}
+{% endif %}<br />
+{% if groups.tag_role_tower is defined %}
       Ansible Tower URL (admin/{{ tower_pass }}):
 {% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + user.username] %}
 <a href="https://{{ vm }}" target="tower_url_{{ user.username }}">https://{{ vm }}</a><br />
 {% endfor %}
+{% endif %}
 <br />
       <h2>Inventory</h2>
       <p>[all:vars]<br />
@@ -95,20 +99,26 @@ ansible_ssh_pass={{ admin_password }}<br />
 ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
+{% if groups.tag_role_cfme is defined %}
 [cfme]<br />
 {% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + user.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}
+{% endif %}
 <br />
+{% if groups.tag_role_tower is defined %}
 [tower]<br />
 {% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + user.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
 {% endfor %}
+{% endif %}
 <br />
+{% if groups.tag_role_web is defined %}
 [web]<br />
 {% for vm in groups.tag_role_web if vm in groups['tag_pod_' + user.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
-{% endfor %}</p>
+{% endfor %}
+{% endif %}</p>
     </div>
   </div>
 {% endfor %}

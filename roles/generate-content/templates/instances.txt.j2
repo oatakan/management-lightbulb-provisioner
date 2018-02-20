@@ -5,22 +5,30 @@ ansible_ssh_pass={{ admin_password }}
 ansible_port={{ ssh_port }}
 {% endif %}
 
+{% if groups.tag_role_cfme is defined %}
 [cfme]
 {% for vm in groups.tag_role_cfme if vm in groups['tag_pod_' + item.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
+{% endif %}
 
+{% if groups.tag_role_tower is defined %}
 [tower]
 {% for vm in groups.tag_role_tower if vm in groups['tag_pod_' + item.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
+{% endif %}
 
+{% if groups.tag_role_web is defined %}
 [web]
 {% for vm in groups.tag_role_web if vm in groups['tag_pod_' + item.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
+{% endif %}
 
+{% if groups.tag_role_control is defined %}
 [control]
 {% for vm in groups.tag_role_control if vm in groups['tag_pod_' + item.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
+{% endif %}
