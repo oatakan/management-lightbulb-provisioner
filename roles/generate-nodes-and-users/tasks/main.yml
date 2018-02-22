@@ -1,0 +1,39 @@
+---
+- name: generate users list
+  set_fact:
+    users: "{{ users|default([]) + [ {'name': 'student' + item, 'username': 'student' + item, 'email': 'student' + item + '@example.com'} ] }}"
+  with_sequence: start="{{ student_count_start }}" end="{{ student_count_end }}"
+  when: student_count_start is defined and student_count_end is defined
+
+- name: initialize nodes variable
+  set_fact:
+    nodes: "{{ hosting_nodes }}"
+
+- name: generate nodes list
+  set_fact:
+    nodes: "{{ nodes }} + {{ template_nodes }}"
+  with_items:
+    - "{{ users }}"
+
+- debug:
+    var: nodes
+
+- name: generate windows only nodes list
+  set_fact:
+    windows_nodes: "{{ windows_nodes|default([]) + [ item ] }}"
+  with_items:
+    - "{{ nodes }}"
+  when: item.os_type is defined and item.os_type == 'windows'
+
+- debug:
+    var: windows_nodes
+
+- name: generate linux only nodes list
+  set_fact:
+    linux_nodes: "{{ linux_nodes|default([]) + [ item ] }}"
+  with_items:
+    - "{{ nodes }}"
+  when: item.os_type is not defined or item.os_type == 'linux'
+
+- debug:
+    var: linux_nodes
