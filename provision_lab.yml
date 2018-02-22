@@ -150,7 +150,8 @@
   hosts: control_nodes
   become: yes
   roles:
-    - control-node
+    - role: control-node
+      users: "{{ hostvars.localhost.users }}"
     - geerlingguy.repo-epel
     - geerlingguy.nodejs
     - wetty
