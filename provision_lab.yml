@@ -16,8 +16,8 @@
   become: no
   gather_facts: no
   vars_files:
-    - "workshop_nodes\{{ workshop_name }}\hosting-nodes-ec2.yml"
-    - "workshop_nodes\{{ workshop_name }}\student-nodes-ec2.yml"
+    - "workshop_nodes/{{ workshop_name }}/hosting-nodes-ec2.yml"
+    - "workshop_nodes/{{ workshop_name }}/student-nodes-ec2.yml"
   roles:
     - generate-nodes-and-users
 
