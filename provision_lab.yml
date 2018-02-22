@@ -142,6 +142,7 @@
 #  become_method: sudo
 #  gather_facts: true
 #  roles:
+#    - { role: gitlab-postconfig, users: "{{ hostvars.localhost.users }}", when: groups.tag_role_windows_domain_controller is defined }
 #    - role: gitlab-postconfig
 #      users: "{{ hostvars.localhost.users }}"
 
