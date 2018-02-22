@@ -27,6 +27,7 @@
   roles:
     - role: ansible-role-ec2
       nodes: "{{ linux_nodes }}"
+      when: linux_nodes is defined
 
 - name: add linux hosts to groups
   hosts: localhost
@@ -43,6 +44,7 @@
     - role: ansible-role-ec2
       instance_wait_connection_timeout: 600
       nodes: "{{ windows_nodes }}"
+      when: windows_nodes is defined
 
 - name: add windows hosts to groups and generate content
   hosts: localhost
