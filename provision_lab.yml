@@ -131,19 +131,19 @@
   become_method: sudo
   gather_facts: true
   roles:
-    - linux-dns
+    - { role: linux-dns, when: groups.tag_role_windows_domain_controller is defined }
     - geerlingguy.gitlab
 
 # run post-config separate to avoid handler restart issue
-- name: configure gitlab host
-  hosts: tag_app_management_lightbulb:&tag_role_gitlab
-  become: yes
-  remote_user: ec2-user
-  become_method: sudo
-  gather_facts: true
-  roles:
-    - role: gitlab-postconfig
-      users: "{{ hostvars.localhost.users }}"
+#- name: configure gitlab host
+#  hosts: tag_app_management_lightbulb:&tag_role_gitlab
+#  become: yes
+#  remote_user: ec2-user
+#  become_method: sudo
+#  gather_facts: true
+#  roles:
+#    - role: gitlab-postconfig
+#      users: "{{ hostvars.localhost.users }}"
 
 - name: configure control node
   hosts: control_nodes
