@@ -50,7 +50,7 @@
   hosts: localhost
   become: no
   roles:
-    - create-runtime-inventory
+    #- create-runtime-inventory
     - generate-content
 
 - name: configure common options on all linux nodes
