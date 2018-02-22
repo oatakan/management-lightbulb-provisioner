@@ -132,7 +132,7 @@
   gather_facts: true
   roles:
     - { role: linux-dns, when: groups.tag_role_windows_domain_controller is defined }
-    - geerlingguy.gitlab
+    - { role: geerlingguy.gitlab, when: groups.tag_role_windows_domain_controller is defined }
 
 # run post-config separate to avoid handler restart issue
 #- name: configure gitlab host
