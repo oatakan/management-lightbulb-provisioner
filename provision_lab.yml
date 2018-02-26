@@ -192,8 +192,8 @@
       command: yum-config-manager --enable rhui-REGION-rhel-server-extras rhui-REGION-rhel-server-optional
   roles:
     - provision-dns-ec2
-    - geerlingguy.repo-epel
-    - geerlingguy.certbot
+    #- geerlingguy.repo-epel
+    #- geerlingguy.certbot
     - nginx
     #- role: nginx-ssl
     #  users: "{{ hostvars.localhost.users }}"
