@@ -135,16 +135,14 @@
     - { role: geerlingguy.gitlab, when: groups.tag_role_windows_domain_controller is defined }
 
 # run post-config separate to avoid handler restart issue
-#- name: configure gitlab host
-#  hosts: tag_app_management_lightbulb:&tag_role_gitlab
-#  become: yes
-#  remote_user: ec2-user
-#  become_method: sudo
-#  gather_facts: true
-#  roles:
-#    - { role: gitlab-postconfig, users: "{{ hostvars.localhost.users }}", when: groups.tag_role_windows_domain_controller is defined }
-#    - role: gitlab-postconfig
-#      users: "{{ hostvars.localhost.users }}"
+- name: configure gitlab host
+  hosts: tag_app_management_lightbulb:&tag_role_gitlab
+  become: yes
+  remote_user: ec2-user
+  become_method: sudo
+  gather_facts: true
+  roles:
+    - { role: gitlab-postconfig, users: "{{ hostvars.localhost.users }}", when: groups.tag_role_windows_domain_controller is defined }
 
 - name: configure control node
   hosts: tag_role_control:&tag_app_management_lightbulb

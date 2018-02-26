@@ -40,8 +40,7 @@ image_names:
 
 certbot_admin_email: https@{{ ec2_name_prefix }}.{{ dns_domain_name }}
 certbot_create_if_missing: yes
-certbot_create_standalone_stop_services:
-  - nginx
+certbot_create_standalone_stop_services: []
 certbot_certs:
   - domains:
     - "{{ ec2_name_prefix }}.{{ dns_domain_name }}"
