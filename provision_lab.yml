@@ -189,6 +189,9 @@
 - name: setup hosting
   hosts: tag_role_hosting:&tag_app_management_lightbulb
   become: yes
+  pre_tasks:
+    - name: enable optional repos
+      command: yum-config-manager --enable rhui-REGION-rhel-server-extras rhui-REGION-rhel-server-optional
   roles:
     - provision-dns-ec2
     - geerlingguy.repo-epel
