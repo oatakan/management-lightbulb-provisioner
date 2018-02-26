@@ -194,8 +194,9 @@
     - provision-dns-ec2
     - geerlingguy.repo-epel
     - geerlingguy.certbot
-    - role: nginx-ssl
-      users: "{{ hostvars.localhost.users }}"
+    - nginx
+    #- role: nginx-ssl
+    #  users: "{{ hostvars.localhost.users }}"
     - hosting-generate-html
     - hosting-upload-content
 
