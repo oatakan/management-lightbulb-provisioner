@@ -76,6 +76,13 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
   <div data-role="main" class="ui-content">
     <div data-role="collapsible">
       <h1>{{ user.username }} - Click to see details!</h1>
+      <h2>Use the links below</h2><br />
+{% if groups.tag_role_control is defined %}
+      For SSH access over web ({{ user.username }}/{{ admin_password }}):
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
+<a href="https://{{ vm }}:8888" target="control_node_url_{{ user.username }}">https://{{ vm }}:8888</a><br />
+{% endfor %}
+{% endif %}<br />
       <p>[all:vars]<br />
 ansible_user={{ user.username }}<br />
 ansible_ssh_pass={{ admin_password }}<br />
