@@ -30,6 +30,7 @@ workshop_names:
 workshop_name: w1-ansible-tower-lb
 
 workshop_content_git_repo_url: https://github.com/oatakan/ansible-workshop.git
+workshop_decks_git_repo_url: https://github.com/ansible/lightbulb.git
 workshop_ascii_doc_file_name: doc/ansible-workshop-lab-guide.adoc
 
 image_names:
