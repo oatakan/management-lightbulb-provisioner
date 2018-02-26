@@ -38,6 +38,14 @@ image_names:
   cfme-58: import-ami-fg7ju3vd
   win-2016: Windows_Server-2016-English-Full-Base-2018.01.12
 
+certbot_admin_email: https@{{ ec2_name_prefix }}.{{ dns_domain_name }}
+certbot_create_if_missing: yes
+certbot_create_standalone_stop_services:
+  - nginx
+certbot_certs:
+  - domains:
+    - "{{ ec2_name_prefix }}.{{ dns_domain_name }}"
+
 # Needed for reverse lookup DNS setup
 ptr_zone_name: "10.10.in-addr.arpa"
 ptr_zone_cidr: "10.10.0.0/16"

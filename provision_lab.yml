@@ -191,7 +191,9 @@
   become: yes
   roles:
     - provision-dns-ec2
-    - nginx
+    - geerlingguy.repo-epel
+    - geerlingguy.certbot
+    - nginx-ssl
     - hosting-generate-html
     - hosting-upload-content
 

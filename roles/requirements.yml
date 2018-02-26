@@ -6,3 +6,5 @@
 - src: geerlingguy.nodejs
 
 - src: geerlingguy.gitlab
+
+- src: geerlingguy.certbot

@@ -1,0 +1,47 @@
+#Point http requests to https
+server {
+    listen 0.0.0.0:80;
+    server_name {{ ec2_name_prefix }}.{{ dns_domain_name }};
+    server_tokens off;
+    return 301 https://$host$request_uri;
+}
+
+# the secure nginx server instance
+server {
+    listen 443 ssl;
+    ssl_certificate     /etc/letsencrypt/live/{{ ec2_name_prefix }}.{{ dns_domain_name }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ ec2_name_prefix }}.{{ dns_domain_name }}/privkey.pem;
+    ssl_protocols       TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    server_name {{ ec2_name_prefix }}.{{ dns_domain_name }};
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+{% for user in users %}
+{% if groups.tag_role_control is defined %}
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
+    location /{{ user.username }} {
+      rewrite /{{ user.username }}/(.*)$ /$1 break;
+
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-NginX-Proxy true;
+      proxy_set_header X-Ssl on;
+
+      proxy_pass https://{{ vm }}:8888;
+      proxy_redirect off;
+    }
+{% endfor %}
+{% endif %}
+{% endfor %}
+}
