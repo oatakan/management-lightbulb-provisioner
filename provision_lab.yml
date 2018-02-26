@@ -147,7 +147,7 @@
 #      users: "{{ hostvars.localhost.users }}"
 
 - name: configure control node
-  hosts: control_nodes
+  hosts: tag_role_control:&tag_app_management_lightbulb
   become: yes
   roles:
     - role: control-node
