@@ -5,5 +5,8 @@
 - name: wetty
   service: name=wetty state=restarted
 
+- name: reload systemd
+  command: systemctl daemon-reload
+
 - name: sshd
   service: name=sshd state=restarted

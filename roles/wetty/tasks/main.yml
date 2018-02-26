@@ -80,7 +80,9 @@
     group: root 
     owner: root
     mode:  0644
-  notify: wetty
+  notify:
+    - reload systemd
+    - wetty
 
 - name: enable wetty service
   become: yes

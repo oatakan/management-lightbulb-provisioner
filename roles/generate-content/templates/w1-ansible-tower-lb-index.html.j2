@@ -80,7 +80,7 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
 {% if groups.tag_role_control is defined %}
       For SSH access over web ({{ user.username }}/{{ admin_password }}):<br />
 {% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
-<a href="/{{ user.username }}" target="control_node_url_{{ user.username }}">/{{ user.username }}</a><br />
+<a href="/{{ user.username }}" target="control_node_url_{{ user.username }}">{{ user.username }}</a><br />
       or<br />
 <a href="https://{{ vm }}:8888" target="control_node_url_{{ user.username }}">https://{{ vm }}:8888</a><br />
 {% endfor %}
