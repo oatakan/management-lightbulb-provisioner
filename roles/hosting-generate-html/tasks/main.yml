@@ -19,11 +19,6 @@
   delay: 3
   retries: 5
 
-- name: create decks directory
-  file:
-    path: /usr/share/nginx/html/decks
-    state: directory
-
 - name: checkout the decks from git
   git:
     repo: "{{ workshop_decks_git_repo_url }}"
@@ -34,7 +29,7 @@
 - name: copy decks
   synchronize:
     src: /tmp/decks/decks
-    dest: /usr/share/nginx/html/decks
+    dest: /usr/share/nginx/html
   delegate_to: "{{ inventory_hostname }}"
 
 - name: create workshop content directory
