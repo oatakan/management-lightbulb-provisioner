@@ -27,6 +27,8 @@ workshop_names:
   - w2-tower-cf-lb
   - w3-ansible-tower-win-lb
 
+nginx_ssl: yes
+
 workshop_name: w1-ansible-tower-lb
 
 workshop_content_git_repo_url: https://github.com/oatakan/ansible-workshop.git
