@@ -99,7 +99,6 @@
     dest: "{{ control_node_inventory_path }}"
     owner: "{{ username }}"
     group: "{{ username }}"
-  when: username in inventory_hostname
   tags:
     - control_node
     - control
