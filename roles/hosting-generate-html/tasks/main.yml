@@ -32,11 +32,10 @@
     clone: yes
 
 - name: copy decks
-  copy:
-    src: /tmp/decks/decks/
-    dest: /usr/share/nginx/html/decks/
-    directory_mode: yes
-    remote_src: yes
+  synchronize:
+    src: /tmp/decks/decks
+    dest: /usr/share/nginx/html/decks
+  delegate_to: "{{ inventory_hostname }}"
 
 - name: create workshop content directory
   file:
