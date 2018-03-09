@@ -1,0 +1,19 @@
+- name: terminate ec2 instances
+  hosts: localhost
+  become: no
+  tasks:
+    - name: get ec2 instance information
+      ec2_instance_facts:
+        region: "{{ student_ec2_region }}"
+        filters:
+          vpc-id: "{{ student_ec2_vpc_id }}"
+          key-name: "{{ student_ec2_key_name }}"
+          "tag:name": "{{ student_ec2_name_prefix }}-*"
+      register: ec2_instances
+
+    - name: terminate instances
+      ec2:
+        region: "{{ student_ec2_region }}"
+        state: "absent"
+        instance_ids: "{{ ec2_instances.instances | map(attribute='instance_id') | list }}"
+      when: ec2_instances.instances | length > 0
