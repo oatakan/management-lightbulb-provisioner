@@ -1,7 +1,7 @@
 s3_bucket_name: oa-cfmeeast
-image_name: cfme-ec2-5.9.0.21-1.x86_64.vhd
+image_name: cfme-ec2-5.9.0.22-1.x86_64.vhd
 image_location: ../../Downloads/
-image_short_name: cfme59021-rc1
+image_short_name: cfme59022
 
 containers:
   - Description: "{{ image_short_name }}"

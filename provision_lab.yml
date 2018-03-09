@@ -35,22 +35,22 @@
   roles:
     - create-runtime-inventory
 
-#- name: provision windows ec2 instances
-#  hosts: localhost
-#  become: no
-#  vars:
-#    ansible_port: 5986
-#  roles:
-#    - role: ansible-role-ec2
-#      instance_wait_connection_timeout: 600
-#      nodes: "{{ windows_nodes }}"
-#      when: windows_nodes is defined
+- name: provision windows ec2 instances
+  hosts: localhost
+  become: no
+  vars:
+    ansible_port: 5986
+  roles:
+    - role: ansible-role-ec2
+      instance_wait_connection_timeout: 600
+      nodes: "{{ windows_nodes }}"
+      when: windows_nodes is defined
 
 - name: add windows hosts to groups and generate content
   hosts: localhost
   become: no
   roles:
-    #- create-runtime-inventory
+    - create-runtime-inventory
     - generate-content
 
 - name: configure common options on all linux nodes
