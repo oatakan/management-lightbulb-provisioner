@@ -33,17 +33,9 @@
   win_shell: Set-DnsClientGlobalSetting -SuffixSearchList {{ dns_domain_name }}, ec2.internal
   when: "dns_domain_name not in suffixsearchlist.stdout"
 
-#- name: Add users to Remote Desktop Users group
-#  win_group_membership:
-#    name: Remote Desktop Users
-#    members: "{{ users | map(attribute='username') | map('regex_replace', '^(.*)$', dns_domain_name + '\\1') | list }}"
-#    state: present
-#  ignore_errors: yes
-
 - name: Add user to Remote Desktop Users group
   win_group_membership:
     name: Remote Desktop Users
-    #members: "{{ dns_domain_name }}{{ '\' }}{{ username }}"
     members:
       - '{{ dns_domain_name }}\{{ username }}'
     state: present

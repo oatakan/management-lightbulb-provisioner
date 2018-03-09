@@ -78,9 +78,9 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
       <h1>{{ user.username }} - Click to see details!</h1>
       <h2>Use the links below</h2><br />
 {% if groups.tag_role_windows_workstation is defined %}
-      Login to your workstation using RDP ({{ user.username }}/{{ users_password }}):
+      Login to your workstation using RDP (username: {{ dns_domain_name }}\{{ user.username }}, password: {{ users_password }}):
 {% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + user.username] %}
-<a href="rdp://{{ vm }}" target="wk_url_{{ user.username }}">rdp://{{ vm }}</a><br />
+      Open remote desktop connection to {{ vm }}<br />
 {% endfor %}
 {% endif %}<br />
 {% if groups.tag_role_gitlab is defined %}
