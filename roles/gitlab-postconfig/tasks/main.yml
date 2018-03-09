@@ -183,7 +183,6 @@
   with_items: "{{ users }}"
   delegate_to: localhost
   become: no
-  ignore_errors: yes
 
 - name: GitLab Post | Create Projects in GitLab
   command: ./create_project.py -s "https://{{ hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks

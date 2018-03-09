@@ -39,4 +39,8 @@
     members:
       - '{{ dns_domain_name }}\{{ username }}'
     state: present
+  register: remote_desktop_group
+  until: remote_desktop_group|success
+  delay: 3
+  retries: 5
   ignore_errors: yes
