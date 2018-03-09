@@ -26,7 +26,7 @@ hosting_nodes:
     role: windows_domain_controller
     app_name: management_lightbulb
     pod_name: "main"
-    instance_type: t2.medium
+    instance_type: t2.large
     image: "{{ win2016_ami_id|default('ami-603b1c1a') }}" #windows 2016 base
     os_type: windows
     user_data: "{{ lookup('template', 'templates/windows.userdata.txt.j2') }}"
