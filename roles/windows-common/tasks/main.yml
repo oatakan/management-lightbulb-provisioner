@@ -45,6 +45,6 @@
     name: Remote Desktop Users
     #members: "{{ dns_domain_name }}{{ '\' }}{{ username }}"
     members:
-      - "{{ dns_domain_name }}/{{ username }}"
+      - "{{ username }}"
     state: present
   ignore_errors: yes
