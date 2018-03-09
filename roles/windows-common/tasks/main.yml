@@ -40,7 +40,7 @@
 
 - name: Reboot if needed
   win_reboot:
-  when: windomain.reboot_required
+  #when: windomain.reboot_required
 
 - name: Get current DNS search string
   win_shell: Get-DnsClientGlobalSetting | Select SuffixSearchList 
