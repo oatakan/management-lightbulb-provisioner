@@ -4,16 +4,17 @@
   win_dns_client:
     adapter_names: "*"
     ipv4_addresses: "{{ dns_servers }}"
-    #log_path: c:\dns_log.txt
 
 - name: Join Domain
   win_domain_membership:
     dns_domain_name: "{{ dns_domain_name }}"
     domain_admin_user: "Admin@{{ dns_domain_name }}"
     domain_admin_password: "{{ domain_admin_password }}"
-    #hostname: "wintestvm"
     state: domain
   register: windomain
+  until: windomain|success
+  delay: 3
+  retries: 5
 
 - debug: var=windomain
 
@@ -35,6 +36,6 @@
 - name: Add users to Remote Desktop Users group
   win_group_membership:
     name: Remote Desktop Users
-    members: "{{ users | map(attribute='username') | map('regex_replace', '^(.*)$', dns_domain_name + '\\\\1') | list }}"
+    members: "{{ users | map(attribute='username') | map('regex_replace', '^(.*)$', dns_domain_name + '\\1') | list }}"
     state: present
   ignore_errors: yes
