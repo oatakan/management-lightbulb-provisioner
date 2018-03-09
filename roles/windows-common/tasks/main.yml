@@ -43,6 +43,6 @@
 - name: Add user to Remote Desktop Users group
   win_group_membership:
     name: Remote Desktop Users
-    members: "{{ dns_domain_name }}\{{ username }}"
+    members: "{{ dns_domain_name }}{{ '\' }}{{ username }}"
     state: present
   ignore_errors: yes
