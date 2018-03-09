@@ -25,3 +25,4 @@ Requirements:
     - passlib
     - pyapi-gitlab
     - pywinrm
+    - sendgrid==2.2.1

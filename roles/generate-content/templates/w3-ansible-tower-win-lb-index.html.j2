@@ -99,10 +99,10 @@ ansible_port={{ ssh_port }}<br />
 <br />
 {% if groups.tag_role_windows is defined %}
 [windows:vars]<br />
-ansible_connection=winrm
-ansible_winrm_transport=basic
-ansible_winrm_server_cert_validation=ignore
-ansible_port=5986
+ansible_connection=winrm<br />
+ansible_winrm_transport=basic<br />
+ansible_winrm_server_cert_validation=ignore<br />
+ansible_port=5986<br />
 {% endif %}
 <br />
 {% if groups.tag_role_control is defined %}

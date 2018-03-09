@@ -13,6 +13,8 @@ ec2_private_key: "{{ vault_ec2_private_key }}"
 dns_domain_name: "rhdemo.io"
 domain_admin_password: "{{ vault_domain_admin_password }}"
 
+users_password: "{{ vault_users_password }}"
+
 student_ec2_key_name: "{{ vault_student_ec2_key_name }}"
 student_ec2_name_prefix: "{{ ec2_name_prefix }}"
 student_ec2_region: "{{ vault_student_ec2_region }}"

@@ -114,7 +114,8 @@
     ansible_winrm_server_cert_validation: ignore
   gather_facts: true
   roles:
-    - windows-common
+    - role: windows-common
+      users: "{{ hostvars.localhost.users }}"
     - windows-workstation
 
 - name: configure common options on all windows nodes
@@ -129,7 +130,8 @@
     ansible_winrm_server_cert_validation: ignore
   gather_facts: true
   roles:
-    - windows-common
+    - role: windows-common
+      users: "{{ hostvars.localhost.users }}"
 
 - name: configure gitlab host
   hosts: tag_app_management_lightbulb:&tag_role_gitlab
