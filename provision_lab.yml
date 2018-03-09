@@ -73,7 +73,14 @@
     ansible_connection: winrm
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
-  gather_facts: true
+  gather_facts: false
+  pre_tasks:
+    - name: gather facts
+      setup:
+      register: setup_task
+      until: setup_task|success
+      delay: 3
+      retries: 5
   roles:
     - windows-hostname
 
