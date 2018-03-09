@@ -42,7 +42,7 @@
     ansible_port: 5986
   roles:
     - role: ansible-role-ec2
-      instance_wait_connection_timeout: 600
+      instance_wait_connection_timeout: 800
       nodes: "{{ windows_nodes }}"
       when: windows_nodes is defined
 
