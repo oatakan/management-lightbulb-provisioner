@@ -78,15 +78,15 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
       <h1>{{ user.username }} - Click to see details!</h1>
       <h2>Use the links below</h2><br />
 {% if groups.tag_role_windows_workstation is defined %}
-      Login to your workstation using RDP (username: {{ dns_domain_name }}\{{ user.username }}, password: {{ users_password }}):
+      Login to your workstation using RDP.
 {% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + user.username] %}
-      Open remote desktop connection to {{ vm }}<br />
+      Open a remote desktop connection session to <b>{{ vm }}</b> (username: <b>{{ dns_domain_name }}\{{ user.username }}</b>, password: <b>{{ users_password }}</b>)<br />
 {% endfor %}
 {% endif %}<br />
 {% if groups.tag_role_gitlab is defined %}
-      Login to your gitlab URL ({{ user.username }}/{{ users_password }}):
+      Login to your gitlab URL:
 {% for vm in groups.tag_role_gitlab if vm in groups['tag_pod_main'] %}
-<a href="https://{{ vm }}" target="gl_url_{{ user.username }}">https://{{ vm }}</a><br />
+<a href="https://{{ vm }}" target="gl_url_{{ user.username }}">https://{{ vm }}</a>  (username: <b>{{ user.username }}</b>, password: <b>{{ users_password }}</b>)<br />
 {% endfor %}
 {% endif %}<br />
 <br />
@@ -98,12 +98,6 @@ ansible_ssh_pass={{ admin_password }}<br />
 ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
-{% if groups.tag_role_control is defined %}
-[control]<br />
-{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
-{% endfor %}
-{% endif %}<br />
 {% if groups.tag_role_windows_node is defined %}
 [windows]<br />
 {% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + user.username] %}
