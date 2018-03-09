@@ -19,7 +19,7 @@
 #- debug: var=winworkgroup
 
 - name: Reset domain membership
-  win_shell: "$computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup({{ ansible_password }}, {{ ansible_user }}, 0)"
+  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ ansible_password }}", "{{ ansible_user }}", 0)
   register: reset_domain_membership
 
 - debug:

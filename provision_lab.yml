@@ -172,6 +172,7 @@
     - "group_vars/all/vault"
   roles:
     - provision-ansible-tower
+    - tower-harden
     - tower-add-content
     - geerlingguy.repo-epel
     - geerlingguy.nodejs
