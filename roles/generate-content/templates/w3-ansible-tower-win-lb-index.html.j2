@@ -98,6 +98,12 @@ ansible_ssh_pass={{ admin_password }}<br />
 ansible_port={{ ssh_port }}<br />
 {% endif %}
 <br />
+{% if groups.tag_role_control is defined %}
+[control]<br />
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
+{% endfor %}
+{% endif %}<br />
 {% if groups.tag_role_windows_node is defined %}
 [windows]<br />
 {% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + user.username] %}
