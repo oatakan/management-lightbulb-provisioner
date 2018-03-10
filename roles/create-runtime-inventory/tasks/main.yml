@@ -133,7 +133,7 @@
     ec2_ip_address: "{{ item.tagged_instances[0].public_ip }}"
     ec2_private_ip_address: "{{ item.tagged_instances[0].private_ip }}"
     ec2_private_dns_name: "{{ item.tagged_instances[0].private_dns_name }}"
-    hostname: "{{ item.invocation.module_args.instance_tags.name.split('-')[-1] }}"
+    hostname: "{{ item.invocation.module_args.instance_tags.pod }}-{{ item.invocation.module_args.instance_tags.name.split('-')[-1] }}"
     username: "{{ item.invocation.module_args.instance_tags.pod }}"
   with_items: "{{ instances.results }}"
   delegate_to: "{{ item.tagged_instances[0].public_ip }}"

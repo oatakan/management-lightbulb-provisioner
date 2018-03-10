@@ -63,7 +63,7 @@
 - name: Join Domain
   win_dsc:
     resource_name: xComputer
-    Name: "{{ username }}-{{ hostname }}"
+    Name: "{{ hostname }}"
     DomainName: "{{ dns_domain_name }}"
     credential_username: "Admin@{{ dns_domain_name }}"
     credential_password: "{{ domain_admin_password }}"

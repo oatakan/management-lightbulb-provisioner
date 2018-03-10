@@ -11,7 +11,7 @@ template_nodes:
         volume_type: gp2
         volume_size: 10
         delete_on_termination: true
-  - name: "{{ item.username }}-win-workstation"
+  - name: "{{ item.username }}-win-wks"
     role: windows_workstation
     app_name: management_lightbulb
     pod_name: "{{ item.username }}"
