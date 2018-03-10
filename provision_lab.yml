@@ -77,7 +77,6 @@
   pre_tasks:
     - name: wait for connection on windows nodes
       wait_for_connection:
-        delay: 240
         sleep: 15
         timeout: 900
 
