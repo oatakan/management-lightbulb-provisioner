@@ -244,10 +244,11 @@
     account_locked: no 
     groups:
       - Ansible Users
+      - Remote Desktop Users
     password: "{{ users_password }}"
     update_password: on_create
     password_expired: false
-    firstname: user
+    firstname: "{{ item.username }}"
     surname: user
     company: AnsibleByRedHat
     email: "{{ item.username }}@{{ dns_domain_name }}"
