@@ -185,7 +185,7 @@
   become: no
 
 - name: GitLab Post | Create Projects in GitLab
-  command: ./create_project.py -s "https://{{ hostname | lower }}.{{ dns_domain_name }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
+  command: ./create_project.py -s "https://{{ inventory_hostname }}" -u {{ item.username }} -p {{ users_password }} -r {{ item.username }}-playbooks
   args:
     chdir: /root
   with_items: "{{ users }}"
