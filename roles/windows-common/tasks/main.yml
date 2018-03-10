@@ -25,16 +25,16 @@
 - debug:
     var: reset_domain_membership
 
-#- name: Join Domain
-#  win_domain_membership:
-#    dns_domain_name: "{{ dns_domain_name }}"
-#    domain_admin_user: "Admin@{{ dns_domain_name }}"
-#    domain_admin_password: "{{ domain_admin_password }}"
-#    state: domain
-#  register: windomain
-#  until: windomain|success
-#  delay: 3
-#  retries: 5
+- name: Join Domain
+  win_domain_membership:
+    dns_domain_name: "{{ dns_domain_name }}"
+    domain_admin_user: "Admin@{{ dns_domain_name }}"
+    domain_admin_password: "{{ domain_admin_password }}"
+    state: domain
+  register: windomain
+  until: windomain|success
+  delay: 3
+  retries: 5
 
 #- debug: var=windomain
 
