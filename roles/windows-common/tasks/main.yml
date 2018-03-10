@@ -22,12 +22,12 @@
   win_shell: $secpasswd = ConvertTo-SecureString "{{ domain_admin_password }}" -AsPlainText -Force; $credential = New-Object System.Management.Automation.PSCredential("Admin@{{ dns_domain_name }}", $secpasswd); Reset-ComputerMachinePassword -Server "{{ dns_servers[0] }}" -Credential $credential
   register: reset_domain_password
 
-- name: Reset domain membership
-  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", $null, 3)
-  register: reset_domain_membership
+#- name: Reset domain membership
+#  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", $null, 3)
+#  register: reset_domain_membership
 
-- debug:
-    var: reset_domain_membership
+#- debug:
+#    var: reset_domain_membership
 
 #- name: Join Domain
 #  win_domain_membership:
@@ -47,19 +47,22 @@
     name: xComputerManagement
     state: present
 
-#- name: Join Workgroup
-#  win_dsc:
-#    resource_name: xComputer
-#    Name: "{{ hostname }}"
-#    WorkGroupName: "Workgroup"
-#    credential_username: "Administrator"
-#    credential_password: "{{ ansible_password }}"
-#  register: dsc_join_workgroup
+- name: Join Workgroup
+  win_dsc:
+    resource_name: xComputer
+    Name: "{{ hostname }}"
+    WorkGroupName: "Workgroup"
+    credential_username: "Administrator"
+    credential_password: "{{ ansible_password }}"
+  register: dsc_join_workgroup
+
+- debug:
+    var: hostname
 
 - name: Join Domain
   win_dsc:
     resource_name: xComputer
-    Name: "{{ hostname }}"
+    Name: "{{ username}}-{{ hostname }}"
     DomainName: "{{ dns_domain_name }}"
     credential_username: "Admin@{{ dns_domain_name }}"
     credential_password: "{{ domain_admin_password }}"
