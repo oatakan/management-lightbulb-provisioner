@@ -18,10 +18,12 @@
 
 #- debug: var=winworkgroup
 
-- name: Reset domain password
-  win_shell: $secpasswd = ConvertTo-SecureString "{{ domain_admin_password }}" -AsPlainText -Force; $credential = New-Object System.Management.Automation.PSCredential("Admin@{{ dns_domain_name }}", $secpasswd); Reset-ComputerMachinePassword -Server "{{ dns_servers[0] }}" -Credential $credential
-  register: reset_domain_password
-  ignore_errors: yes
+#- name: Reset domain password
+#  win_shell: $secpasswd = ConvertTo-SecureString "{{ domain_admin_password }}" -AsPlainText -Force; $credential = New-Object System.Management.Automation.PSCredential("Admin@{{ dns_domain_name }}", $secpasswd); Reset-ComputerMachinePassword -Server "{{ dns_servers[0] }}" -Credential $credential
+#  register: reset_domain_password
+#  ignore_errors: yes
+
+# Test-ComputerSecureChannel -repair -credential
 
 #- name: Reset domain membership
 #  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", $null, 3)
@@ -56,9 +58,6 @@
     credential_username: "Administrator"
     credential_password: "{{ ansible_password }}"
   register: dsc_join_workgroup
-
-- debug:
-    var: hostvars[inventory_hostname]
 
 - name: Join Domain
   win_dsc:
