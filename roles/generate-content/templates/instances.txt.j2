@@ -28,14 +28,14 @@ ansible_port={{ ssh_port }}
 {% if groups.tag_role_windows_node is defined %}
 
 [windows]
-{% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + user.username] %}
+{% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + item.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
 {% endif %}
 {% if groups.tag_role_windows_workstation is defined %}
 
 [windows_workstation]
-{% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + user.username] %}
+{% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + item.username] %}
 {{ hostvars[vm].hostname }} ansible_host={{ vm }}
 {% endfor %}
 {% endif %}
