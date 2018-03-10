@@ -87,7 +87,7 @@
     resource_name: group
     GroupName: Remote Desktop Users
     Ensure: Present
-    MembersToInclude: '{{ dns_domain_name }}\{{ username }}'
+    MembersToInclude: '{{ dns_domain_name }}\student1'
     credential_username: "Admin@{{ dns_domain_name }}"
     credential_password: "{{ domain_admin_password }}"
   register: add_user_to_rdp_group
