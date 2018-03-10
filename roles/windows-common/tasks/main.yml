@@ -43,7 +43,7 @@
     name: xComputerManagement
     state: present
 
-- name: Invoke DSC with check mode
+- name: Join Domain
   win_dsc:
     resource_name: xComputer
     Name: "{{ hostname }}"
@@ -70,14 +70,27 @@
   win_shell: Set-DnsClientGlobalSetting -SuffixSearchList {{ dns_domain_name }}, ec2.internal
   when: "dns_domain_name not in suffixsearchlist.stdout"
 
+#- name: Add user to Remote Desktop Users group
+#  win_group_membership:
+#    name: Remote Desktop Users
+#    members:
+#      - '{{ dns_domain_name }}\{{ username }}'
+#    state: present
+#  register: remote_desktop_group
+#  until: remote_desktop_group|success
+#  delay: 3
+#  retries: 10
+#  ignore_errors: yes
+
 - name: Add user to Remote Desktop Users group
-  win_group_membership:
-    name: Remote Desktop Users
-    members:
-      - '{{ dns_domain_name }}\{{ username }}'
-    state: present
-  register: remote_desktop_group
-  until: remote_desktop_group|success
-  delay: 3
-  retries: 10
-  ignore_errors: yes
+  win_dsc:
+    resource_name: group
+    GroupName: Remote Desktop Users
+    Ensure: Present
+    MembersToInclude: '{{ dns_domain_name }}\{{ username }}'
+    credential_username: "Admin@{{ dns_domain_name }}"
+    credential_password: "{{ domain_admin_password }}"
+  register: add_user_to_rdp_group
+
+- debug:
+    var: add_user_to_rdp_group
