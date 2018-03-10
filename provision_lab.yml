@@ -75,6 +75,10 @@
     ansible_winrm_server_cert_validation: ignore
   gather_facts: false
   pre_tasks:
+    - name: Sleep 3 minutes for windows nodes to be fully responsive
+      pause:
+        minutes: 3
+
     - name: gather facts
       setup:
       register: setup_task

@@ -89,6 +89,14 @@ Request Licensing page (Pick the second option: non-Enterprise version for immed
 <a href="https://{{ vm }}" target="gl_url_{{ user.username }}">https://{{ vm }}</a>  (username: <b>{{ user.username }}</b>, password: <b>{{ users_password }}</b>)<br />
 {% endfor %}
 {% endif %}<br />
+{% if groups.tag_role_control is defined %}
+      control node SSH access over web ({{ user.username }}/{{ admin_password }}):<br />
+{% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
+<a href="/{{ hostvars[vm].hostname }}" target="control_node_url_{{ hostvars[vm].hostname }}">{{ hostvars[vm].hostname }}</a><br />
+      or<br />
+<a href="https://{{ vm }}:{{ wetty_port }}" target="control_node_url_{{ user.username }}">https://{{ vm }}:{{ wetty_port }}</a><br />
+{% endfor %}
+{% endif %}<br />
 <br />
       <h2>Inventory</h2>
       <p>[all:vars]<br />
