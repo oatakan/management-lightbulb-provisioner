@@ -18,25 +18,40 @@
 
 #- debug: var=winworkgroup
 
-- name: Reset domain membership
-  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ ansible_password }}", "{{ ansible_user }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ ansible_password }}", "{{ ansible_user }}", $null, 3)
-  register: reset_domain_membership
+#- name: Reset domain membership
+#  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ ansible_password }}", "{{ ansible_user }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ ansible_password }}", "{{ ansible_user }}", $null, 3)
+#  register: reset_domain_membership
 
-- debug:
-    var: reset_domain_membership
+#- debug:
+#    var: reset_domain_membership
 
-- name: Join Domain
-  win_domain_membership:
-    dns_domain_name: "{{ dns_domain_name }}"
-    domain_admin_user: "Admin@{{ dns_domain_name }}"
-    domain_admin_password: "{{ domain_admin_password }}"
-    state: domain
-  register: windomain
-  until: windomain|success
-  delay: 3
-  retries: 5
+#- name: Join Domain
+#  win_domain_membership:
+#    dns_domain_name: "{{ dns_domain_name }}"
+#    domain_admin_user: "Admin@{{ dns_domain_name }}"
+#    domain_admin_password: "{{ domain_admin_password }}"
+#    state: domain
+#  register: windomain
+#  until: windomain|success
+#  delay: 3
+#  retries: 5
 
 #- debug: var=windomain
+
+- name: Add a powershell module
+  win_psmodule:
+    name: xComputerManagement
+    state: present
+
+- name: Invoke DSC with check mode
+  win_dsc:
+    resource_name: xComputer
+    Name: "{{ hostname }}"
+    DomainName: "{{ dns_domain_name }}"
+  register: dsc_join_domain
+
+- debug:
+    var: dsc_join_domain
 
 - name: Reboot if needed
   win_reboot:
