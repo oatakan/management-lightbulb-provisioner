@@ -18,12 +18,12 @@
 
 #- debug: var=winworkgroup
 
-#- name: Reset domain membership
-#  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", $null, 3)
-#  register: reset_domain_membership
+- name: Reset domain membership
+  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", $null, 3)
+  register: reset_domain_membership
 
-#- debug:
-#    var: reset_domain_membership
+- debug:
+    var: reset_domain_membership
 
 #- name: Join Domain
 #  win_domain_membership:
@@ -38,31 +38,31 @@
 
 #- debug: var=windomain
 
-- name: Add a powershell module
-  win_psmodule:
-    name: xComputerManagement
-    state: present
+#- name: Add a powershell module
+#  win_psmodule:
+#    name: xComputerManagement
+#    state: present
 
-- name: Join Workgroup
-  win_dsc:
-    resource_name: xComputer
-    Name: "{{ hostname }}"
-    WorkGroupName: "Workgroup"
-    credential_username: "Administrator"
-    credential_password: "{{ ansible_password }}"
-  register: dsc_join_workgroup
+#- name: Join Workgroup
+#  win_dsc:
+#    resource_name: xComputer
+#    Name: "{{ hostname }}"
+#    WorkGroupName: "Workgroup"
+#    credential_username: "Administrator"
+#    credential_password: "{{ ansible_password }}"
+#  register: dsc_join_workgroup
 
-- name: Join Domain
-  win_dsc:
-    resource_name: xComputer
-    Name: "{{ hostname }}"
-    DomainName: "{{ dns_domain_name }}"
-    credential_username: "Admin@{{ dns_domain_name }}"
-    credential_password: "{{ domain_admin_password }}"
-  register: dsc_join_domain
+#- name: Join Domain
+#  win_dsc:
+#    resource_name: xComputer
+#    Name: "{{ hostname }}"
+#    DomainName: "{{ dns_domain_name }}"
+#    credential_username: "Admin@{{ dns_domain_name }}"
+#    credential_password: "{{ domain_admin_password }}"
+#  register: dsc_join_domain
 
-- debug:
-    var: dsc_join_domain
+#- debug:
+#    var: dsc_join_domain
 
 - name: Reboot if needed
   win_reboot:
@@ -97,7 +97,7 @@
     GroupName: Remote Desktop Users
     Ensure: Present
     MembersToInclude: '{{ username }}@{{ dns_domain_name }}'
-    credential_username: "Administrator"
+    credential_username: "Admin@{{ dns_domain_name }}"
     credential_password: "{{ domain_admin_password }}"
   register: add_user_to_rdp_group
 
