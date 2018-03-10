@@ -19,7 +19,7 @@
 #- debug: var=winworkgroup
 
 - name: Reset domain membership
-  win_shell: Reset-ComputerMachinePassword -Server "{{ dns_servers[0] }}" -Credential "Admin@{{ dns_domain_name }}"
+  win_shell: $secpasswd = ConvertTo-SecureString "{{ domain_admin_password }}" -AsPlainText -Force; $credential = New-Object System.Management.Automation.PSCredential("Admin@{{ dns_domain_name }}", $secpasswd); Reset-ComputerMachinePassword -Server "{{ dns_servers[0] }}" -Credential $credential
   #win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ domain_admin_password }}", "Admin@{{ dns_domain_name }}", $null, 3)
   register: reset_domain_membership
 
