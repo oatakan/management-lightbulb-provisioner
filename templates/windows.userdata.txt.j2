@@ -5,4 +5,5 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Updat
 $admin = [adsi]("WinNT://./Administrator, user")
 $admin.PSBase.Invoke("SetPassword", "{{ domain_admin_password }}")
 & $([scriptblock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1")))
+& $([scriptblock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1")))
 </powershell>

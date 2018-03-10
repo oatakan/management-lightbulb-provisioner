@@ -50,14 +50,14 @@
     name: xComputerManagement
     state: present
 
-- name: Join Workgroup
-  win_dsc:
-    resource_name: xComputer
-    Name: "{{ hostname }}"
-    WorkGroupName: "Workgroup"
-    credential_username: "Administrator"
-    credential_password: "{{ ansible_password }}"
-  register: dsc_join_workgroup
+#- name: Join Workgroup
+#  win_dsc:
+#    resource_name: xComputer
+#    Name: "{{ hostname }}"
+#    WorkGroupName: "Workgroup"
+#    credential_username: "Administrator"
+#    credential_password: "{{ ansible_password }}"
+#  register: dsc_join_workgroup
 
 - name: Join Domain
   win_dsc:
@@ -73,7 +73,7 @@
 
 - name: Reboot if needed
   win_reboot:
-  #when: windomain.reboot_required
+  when: dsc_join_domain.reboot_required
 
 - name: Get current DNS search string
   win_shell: Get-DnsClientGlobalSetting | Select SuffixSearchList 
