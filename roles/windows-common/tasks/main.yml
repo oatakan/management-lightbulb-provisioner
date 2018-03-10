@@ -19,24 +19,24 @@
 #- debug: var=winworkgroup
 
 - name: Reset domain membership
-  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ ansible_password }}", "{{ ansible_user }}", 0)
+  win_shell: $computer = Get-WmiObject Win32_ComputerSystem; $computer.UnjoinDomainOrWorkGroup("{{ ansible_password }}", "{{ ansible_user }}", 0); $computer.JoinDomainOrWorkGroup("{{ dns_domain_name }}", "{{ ansible_password }}", "{{ ansible_user }}", $null, 3)
   register: reset_domain_membership
 
 - debug:
     var: reset_domain_membership
 
-- name: Join Domain
-  win_domain_membership:
-    dns_domain_name: "{{ dns_domain_name }}"
-    domain_admin_user: "Admin@{{ dns_domain_name }}"
-    domain_admin_password: "{{ domain_admin_password }}"
-    state: domain
-  register: windomain
-  until: windomain|success
-  delay: 3
-  retries: 5
+#- name: Join Domain
+#  win_domain_membership:
+#    dns_domain_name: "{{ dns_domain_name }}"
+#    domain_admin_user: "Admin@{{ dns_domain_name }}"
+#    domain_admin_password: "{{ domain_admin_password }}"
+#    state: domain
+#  register: windomain
+#  until: windomain|success
+#  delay: 3
+#  retries: 5
 
-- debug: var=windomain
+#- debug: var=windomain
 
 - name: Reboot if needed
   win_reboot:
@@ -62,5 +62,5 @@
   register: remote_desktop_group
   until: remote_desktop_group|success
   delay: 3
-  retries: 5
+  retries: 10
   ignore_errors: yes
