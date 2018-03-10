@@ -48,6 +48,8 @@
     resource_name: xComputer
     Name: "{{ hostname }}"
     DomainName: "{{ dns_domain_name }}"
+    credential_username: "Admin@{{ dns_domain_name }}"
+    credential_password: "{{ domain_admin_password }}"
   register: dsc_join_domain
 
 - debug:
