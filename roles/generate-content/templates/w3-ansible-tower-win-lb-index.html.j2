@@ -115,7 +115,7 @@ ansible_port={{ ssh_port }}<br />
 {% if groups.tag_role_windows_workstation is defined %}
 [windows_workstation]<br />
 {% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}<br />
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_user={{ hostvars[vm].ansible_user }}  ansible_password={{ hostvars[vm].ansible_password }}<br />
 {% endfor %}
 {% endif %}
 <br />
@@ -130,7 +130,7 @@ ansible_port=5986<br />
 {% if groups.tag_role_control is defined %}
 [control]<br />
 {% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_port=22 ansible_user={{ hostvars[vm].ansible_user }}  ansible_password={{ hostvars[vm].ansible_password }}<br />
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_port=22 ansible_user={{ user.username }}  ansible_password={{ admin_password }}<br />
 {% endfor %}
 {% endif %}</p>
     </div>

@@ -1,9 +1,3 @@
-[all:vars]
-ansible_user={{ item.username }}
-ansible_ssh_pass={{ admin_password }}
-{% if ssh_port is defined %}
-ansible_port={{ ssh_port }}
-{% endif %}
 {% if groups.tag_role_cfme is defined %}
 
 [cfme]
@@ -29,7 +23,7 @@ ansible_port={{ ssh_port }}
 
 [windows]
 {% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + item.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_user={{ hostvars[vm].ansible_user }}  ansible_password={{ hostvars[vm].ansible_password }}
 {% endfor %}
 {% endif %}
 {% if groups.tag_role_windows_workstation is defined %}
@@ -51,6 +45,6 @@ ansible_port=5986
 
 [control]
 {% for vm in groups.tag_role_control if vm in groups['tag_pod_' + item.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_port=22 ansible_user={{ hostvars[vm].ansible_user }}  ansible_password={{ hostvars[vm].ansible_password }}
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_port=22 ansible_user={{ item.username }}  ansible_password={{ admin_password }}
 {% endfor %}
 {% endif %}
