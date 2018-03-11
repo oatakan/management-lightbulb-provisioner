@@ -91,8 +91,6 @@ wget http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.
 {% if groups.tag_role_control is defined %}
       control node SSH access over web ({{ user.username }}/{{ admin_password }}):<br />
 {% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
-<a href="/{{ hostvars[vm].hostname }}" target="control_node_url_{{ hostvars[vm].hostname }}">{{ hostvars[vm].hostname }}</a><br />
-      or<br />
 <a href="https://{{ vm }}:{{ wetty_port }}" target="control_node_url_{{ user.username }}">https://{{ vm }}:{{ wetty_port }}</a><br />
 {% endfor %}
 {% endif %}<br />
@@ -108,14 +106,14 @@ ansible_port={{ ssh_port }}<br />
 {% if groups.tag_role_windows_node is defined %}
 [windows]<br />
 {% for vm in groups.tag_role_windows_node if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_user={{ hostvars[vm].ansible_user }}  ansible_password={{ hostvars[vm].ansible_password }}<br />
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_user={{ hostvars[vm].ansible_user }} ansible_password={{ hostvars[vm].ansible_password }}<br />
 {% endfor %}
 {% endif %}
 <br />
 {% if groups.tag_role_windows_workstation is defined %}
 [windows_workstation]<br />
 {% for vm in groups.tag_role_windows_workstation if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_user={{ hostvars[vm].ansible_user }}  ansible_password={{ hostvars[vm].ansible_password }}<br />
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_user={{ hostvars[vm].ansible_user }} ansible_password={{ hostvars[vm].ansible_password }}<br />
 {% endfor %}
 {% endif %}
 <br />
@@ -130,7 +128,7 @@ ansible_port=5986<br />
 {% if groups.tag_role_control is defined %}
 [control]<br />
 {% for vm in groups.tag_role_control if vm in groups['tag_pod_' + user.username] %}
-{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_port=22 ansible_user={{ user.username }}  ansible_password={{ admin_password }}<br />
+{{ hostvars[vm].hostname }} ansible_host={{ vm }} ansible_port=22 ansible_user={{ user.username }} ansible_password={{ admin_password }}<br />
 {% endfor %}
 {% endif %}</p>
     </div>
