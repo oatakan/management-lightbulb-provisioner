@@ -162,6 +162,7 @@
   roles:
     - role: control-node
       users: "{{ hostvars.localhost.users }}"
+    - { role: linux-dns, when: groups.tag_role_windows_domain_controller is defined }
     - geerlingguy.repo-epel
     - geerlingguy.nodejs
     - wetty

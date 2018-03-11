@@ -204,7 +204,7 @@
 
 # Add-DnsServerResourceRecordPtr -Name "17" -ZoneName "1.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "hostname.example.com"
 - name: Set PTR Record for each host 
-  win_shell: Add-DnsServerResourceRecordPtr -Name "{{ hostvars[item]['ec2_private_ip_address'].split('.')[3] }}" -ZoneName "{{ ptr_zone_name }}" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "{{ item + '.' + dns_domain_name}}"
+  win_shell: Add-DnsServerResourceRecordPtr -Name "{{ hostvars[item]['ec2_private_ip_address'].split('.')[3] }}" -ZoneName "{{ ptr_zone_name }}" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "{{ hostvars[item].hostname + '.' + dns_domain_name}}"
   when: "item not in ptr_records.stdout"
   with_items: "{{groups.lab_hosts}}"
 

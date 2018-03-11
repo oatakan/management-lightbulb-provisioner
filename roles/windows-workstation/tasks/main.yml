@@ -29,14 +29,14 @@
     directory: '%ProgramFiles%\PuTTY\'
 
 - name: Allow insecure git repos for self signed certificates
-  win_command: git config --global http.sslVerify "false"
+  win_command: git config --system http.sslVerify "false"
 
 - name: Set git user 
-  win_command: git config --global user.name "{{ username }}{{ inventory_hostname | regex_replace('\\D') }}"
+  win_command: git config --system user.name "{{ username }}{{ inventory_hostname | regex_replace('\\D') }}"
 
 - name: Set git user email
-  win_command: git config --global user.email "{{ username }}{{ inventory_hostname | regex_replace('\\D') }}@{{ dns_domain_name }}"
+  win_command: git config --system user.email "{{ username }}{{ inventory_hostname | regex_replace('\\D') }}@{{ dns_domain_name }}"
 
 - name: Set git to cache credentials
-  win_command: git config --global credential.helper wincred
+  win_command: git config --system credential.helper wincred
 

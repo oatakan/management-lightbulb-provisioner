@@ -44,5 +44,11 @@
     accept_hostkey: yes
     clone: yes
 
-- name: generate html
-  command: asciidoctor /tmp/workshop-content/{{ workshop_ascii_doc_file_name }} -D /usr/share/nginx/html/workshop -o index.html
+- name: copy workshop content
+  synchronize:
+    src: /tmp/workshop-content/_preview/
+    dest: /usr/share/nginx/html
+  delegate_to: "{{ inventory_hostname }}"
+
+#- name: generate html
+#  command: asciidoctor /tmp/workshop-content/{{ workshop_ascii_doc_file_name }} -D /usr/share/nginx/html/workshop -o index.html
