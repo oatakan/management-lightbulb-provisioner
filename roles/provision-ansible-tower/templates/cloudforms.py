@@ -73,6 +73,8 @@ class CloudFormsInventory(object):
                 # include the ansible_ssh_host in the top level
                 if 'ansible_ssh_host' in self.hosts[hostname]:
                     self.inventory['_meta']['hostvars'][hostname]['ansible_ssh_host'] = self.hosts[hostname]['ansible_ssh_host']
+                if 'ansible_host' in self.hosts[hostname]:
+                    self.inventory['_meta']['hostvars'][hostname]['ansible_host'] = self.hosts[hostname]['ansible_host']
 
             data_to_print += self.json_format_dict(self.inventory, self.args.pretty)
 
@@ -261,7 +263,7 @@ class CloudFormsInventory(object):
 
         while not last_page:
             offset = page * limit
-            ret = self._get_json("%s/api/vms?offset=%s&limit=%s&expand=resources,tags,hosts,&attributes=ipaddresses" % (self.cloudforms_url, offset, limit))
+            ret = self._get_json("%s/api/vms?offset=%s&limit=%s&expand=resources,tags,hosts,&attributes=ipaddresses,archived&filter[]=archived=false" % (self.cloudforms_url, offset, limit))
             results += ret['resources']
             if ret['subcount'] < limit:
                 last_page = True
@@ -352,11 +354,14 @@ class CloudFormsInventory(object):
             # Set ansible_ssh_host to the first available public ip address
             if 'ipaddresses' in host and host['ipaddresses'] and isinstance(host['ipaddresses'], list):
                 host['ansible_ssh_host'] = host['ipaddresses'][0]
+                host['ansible_host'] = host['ipaddresses'][0]
                 rfc1918 = re.compile(
                     '^(10(\.(25[0-5]|2[0-4][0-9]|1[0-9]{1,2}|[0-9]{1,2})){3}|((172\.(1[6-9]|2[0-9]|3[01]))|192\.168)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{1,2}|[0-9]{1,2})){2})$')
+                regipv4 = re.compile('^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$')
                 for ipaddress in host['ipaddresses']:
-                    if not rfc1918.match(ipaddress):
+                    if not rfc1918.match(ipaddress) and regipv4.match(ipaddress):
                         host['ansible_ssh_host'] = ipaddress
+                        host['ansible_host'] = ipaddress
                         break
 
             # Create additional groups
